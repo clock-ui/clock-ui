@@ -1,0 +1,47 @@
+{
+  "name": "@clock-ui/utils",
+  "version": "0.1.0",
+  "description": "Shared utility library for Clock UI. Includes time math, animation helpers, and common functions used across Clock UI components.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/clock-ui/clock-ui#readme",
+  "bugs": {
+    "url": "https://github.com/clock-ui/clock-ui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clock-ui/clock-ui.git"
+  },
+  "author": "Robert Latamaosadi <robert.latamaosadi@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "bumpp": "^10.3.1",
+    "tsdown": "^0.15.9",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.1"
+  }
+}
