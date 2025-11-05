@@ -1,7 +1,7 @@
 {
-  "name": "@clock-ui/utils",
+  "name": "@clock-ui/dom",
   "version": "0.1.0",
-  "description": "Shared utility library for Clock UI. Includes time math, animation helpers, and common functions used across Clock UI components.",
+  "description": "Vanilla DOM-based clock components with built-in rendering and styling support.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/clock-ui/clock-ui#readme",
@@ -16,26 +16,28 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.umd.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "style": "./dist/index.css",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
-    }
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/index.css": "./dist/index.css",
+    "./package.json": "./package.json"
   },
+  "unpkg": "./dist/index.umd.js",
+  "jsdelivr": "./dist/index.umd.js",
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@clock-ui/styles": "workspace:*",
+    "@clock-ui/utils": "workspace:*"
+  }
 }
