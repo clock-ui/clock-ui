@@ -13,6 +13,9 @@
     "url": "git+https://github.com/clock-ui/clock-ui.git"
   },
   "author": "Robert Latamaosadi <robert.latamaosadi@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
