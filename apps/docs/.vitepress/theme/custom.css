@@ -1,0 +1,99 @@
+/* Define font variables for clock components */
+:root {
+  --cui-font-family: "Aboreto", serif;
+  --cui-font-family-roman: "Noto Serif Display", serif;
+}
+
+.custom-clock-class {
+  --cui-bg-color: #0d1b2a;
+  --cui-primary-color: #ffe0b5;
+  --cui-secondary-color: #251101;
+  --cui-accent-color: #690500;
+}
+
+html.dark {
+  --cui-bg-color: #13293d;
+  --cui-primary-color: #e8ebe4;
+  --cui-secondary-color: #13293d;
+  --cui-accent-color: #f55d3e;
+}
+
+.advanced-custom-clock {
+  --cui-face-color: #1a1a2e;
+  --cui-frame-color: #16213e;
+  --cui-tick-color: #0f3460;
+  --cui-number-color: #bea0a5;
+  --cui-info-color: #6c87a7;
+
+  --cui-hour-hand-color: #010309;
+  --cui-hour-hand-accent-color: #e94560;
+  --cui-minute-hand-color: #010309;
+  --cui-minute-hand-accent-color: #e94560;
+  --cui-second-hand-color: #f39c12;
+  --cui-pin-color: #e94560;
+}
+
+.clock-wrapper {
+  max-width: 320px;
+  margin: auto;
+}
+
+.world-clock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.city-clock {
+  text-align: center;
+}
+
+.city-clock h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.dark-clock {
+  --cui-bg-color: #1a1a1a;
+  --cui-primary-color: #ffffff;
+  --cui-secondary-color: #333333;
+  --cui-accent-color: #ff6b6b;
+}
+
+.dark-clock-wrapper {
+  background: #0f0f0f;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.minimal-clock {
+  --cui-bg-color: transparent;
+  --cui-primary-color: #333333;
+  --cui-accent-color: #666666;
+}
+
+.minimalist-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.vintage-clock {
+  --cui-font-family: "Times New Roman", serif;
+  --cui-font-family-roman: "Times New Roman", serif;
+  --cui-bg-color: #f5f5dc;
+  --cui-primary-color: #8b4513;
+  --cui-secondary-color: #daa520;
+  --cui-accent-color: #dc143c;
+}
+
+.vintage-container {
+  background: linear-gradient(135deg, #8b4513 0%, #daa520 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border: 4px solid #8b4513;
+}
