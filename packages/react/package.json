@@ -17,22 +17,15 @@
     "dist"
   ],
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "style": "./dist/index.css",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     },
-    "./dist/index.css": "./dist/index.css",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./base.css": "./dist/index.css"
   },
   "publishConfig": {
     "access": "public"
@@ -43,22 +36,25 @@
     "play": "vite --config playground/vite.config.ts",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && pnpm publish",
-    "prepublishOnly": "pnpm run build"
+    "release": "bumpp && bun publish",
+    "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
-  "devDependencies": {
+  "dependencies": {
     "@clock-ui/styles": "workspace:*",
-    "@clock-ui/utils": "workspace:*",
+    "@clock-ui/utils": "workspace:*"
+  },
+  "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@tsconfig/strictest": "^2.0.7",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",
-    "classnames": "^2.5.1"
+    "classnames": "^2.5.1",
+    "config": "workspace:*"
   }
 }

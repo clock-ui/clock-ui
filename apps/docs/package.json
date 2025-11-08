@@ -7,8 +7,10 @@
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
+  "dependencies": {
+    "@clock-ui/vue": "workspace:*"
+  },
   "devDependencies": {
-    "@clock-ui/vue": "workspace:*",
     "vitepress": "^1.6.3"
   }
 }

@@ -2,8 +2,8 @@ name: Publish Packages
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
 
 jobs:
   publish:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: 20
           registry-url: "https://registry.npmjs.org"
 
       - name: Setup Bun
@@ -28,17 +28,8 @@ jobs:
       - name: Build packages
         run: bun run build
 
-      - name: Publish @clock-ui/dom
-        run: cd packages/dom && npm publish
+      - name: Publish packages
+        run: bun run release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @clock-ui/vue
-        run: cd packages/vue && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @clock-ui/react
-        run: cd packages/react && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

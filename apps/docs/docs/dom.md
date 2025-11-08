@@ -32,7 +32,7 @@ You can also use Clock UI directly from a CDN without installation. This is perf
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clock UI CDN Example</title>
     <!-- Include Clock UI CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/@clock-ui/styles/base.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@clock-ui/dom/base.css" />
   </head>
   <body>
     <!-- Clock containers -->
