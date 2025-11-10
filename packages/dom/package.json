@@ -19,17 +19,13 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "style": "./dist/index.css",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./dist/index.css": "./dist/index.css",
-    "./package.json": "./package.json"
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json",
+    "./base.css": "./dist/index.css"
   },
   "unpkg": "./dist/index.umd.js",
   "jsdelivr": "./dist/index.umd.js",
@@ -37,10 +33,15 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "release": "bumpp && bun publish",
+    "prepublishOnly": "bun run build"
   },
-  "devDependencies": {
+  "dependencies": {
     "@clock-ui/styles": "workspace:*",
     "@clock-ui/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "config": "workspace:*"
   }
 }

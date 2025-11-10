@@ -1,4 +1,4 @@
-import "@clock-ui/styles/base.css";
+import "@clock-ui/styles/src/clock-ui.css";
 import {
   calculateShadow,
   ClockFace,
@@ -275,13 +275,13 @@ export class BaseClockUI {
     `;
 
     this.handHour = this.el.querySelector(
-      ".clock-ui__hand--hour",
+      ".clock-ui__hand--hour"
     ) as HTMLElement;
     this.handMinute = this.el.querySelector(
-      ".clock-ui__hand--minute",
+      ".clock-ui__hand--minute"
     ) as HTMLElement;
     this.handSecond = this.el.querySelector(
-      ".clock-ui__hand--second",
+      ".clock-ui__hand--second"
     ) as HTMLElement | null;
   }
 

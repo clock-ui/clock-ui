@@ -4,14 +4,21 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [
+        "dist/**",
+        "cache/**",
+        ".vitepress/dist/**",
+        ".vitepress/cache/**"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
+    },
+    "test": {
+      "dependsOn": ["@clock-ui/utils#build"]
     },
     "dev": {
       "cache": false,

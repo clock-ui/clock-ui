@@ -1,10 +1,8 @@
-import { defineConfig } from "tsdown";
+import { withCSSExportConfig } from "config";
 
-export default defineConfig({
+export default withCSSExportConfig({
   platform: "neutral",
   fromVite: true,
   format: ["esm", "cjs"],
   dts: { vue: true },
-  minify: true,
-  clean: true,
 });

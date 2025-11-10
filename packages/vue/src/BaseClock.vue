@@ -1,13 +1,6 @@
 <script lang="ts" setup>
 import type { BaseClockProps } from "./types/clock";
-import {
-  reactive,
-  ref,
-  onMounted,
-  onUnmounted,
-  watchEffect,
-  useTemplateRef,
-} from "vue";
+import { reactive, ref, onMounted, onUnmounted, watchEffect } from "vue";
 import {
   calculateShadow,
   ClockFace,
@@ -32,7 +25,7 @@ const {
   dualTone = true,
 } = defineProps<BaseClockProps>();
 
-const clockEl = useTemplateRef("clock");
+const clockEl = ref<HTMLElement>();
 const width = ref(0);
 
 // Custom element size observer
@@ -93,7 +86,7 @@ watchEffect(() => {
     ]"
     :style="{ '--cui-width': width }"
   >
-    <div ref="clock" class="clock-ui__face">
+    <div ref="clockEl" class="clock-ui__face">
       <template v-if="!hideTicks">
         <div
           v-for="tickIndex in getTicksToDisplay({
