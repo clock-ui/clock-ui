@@ -7,7 +7,7 @@ export default defineConfig({
 
   description: "A clock component library for DOM, React, and Vue",
   head: [
-    ["link", { rel: "icon", href: "/favicon.ico" }],
+    ["link", { rel: "icon", href: "/clock-ui/favicon.ico" }],
     ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
     [
       "link",
