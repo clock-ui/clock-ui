@@ -1,4 +1,4 @@
-import { withCSSExportConfig } from "config";
+import { withCSSExportConfig } from "config/tsdown";
 
 export default withCSSExportConfig({
   format: ["esm", "cjs"],
