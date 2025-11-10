@@ -2,10 +2,11 @@
   "name": "clock-ui",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=@clock-ui/*",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "docs:build": "turbo run build --filter=docs",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "changeset": "changeset",
