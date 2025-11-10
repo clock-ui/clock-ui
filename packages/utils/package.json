@@ -1,6 +1,7 @@
 {
   "name": "@clock-ui/utils",
   "version": "0.1.0",
+  "private": true,
   "description": "Shared utility library for Clock UI. Includes time math, animation helpers, and common functions used across Clock UI components.",
   "type": "module",
   "license": "MIT",
