@@ -1,8 +1,6 @@
-import { defineConfig } from "tsdown";
+import { withCSSExportConfig } from "config";
 
-export default defineConfig({
-  // ...config options
+export default withCSSExportConfig({
   format: ["esm", "cjs"],
-  minify: true,
-  clean: true,
+  dts: true,
 });

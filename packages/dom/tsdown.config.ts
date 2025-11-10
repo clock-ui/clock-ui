@@ -1,10 +1,7 @@
-import { defineConfig } from "tsdown";
+import { withCSSExportConfig } from "config";
 
-export default defineConfig({
-  // ...config options
+export default withCSSExportConfig({
   globalName: "ClockUI",
   format: ["esm", "umd"],
-  minify: true,
-  clean: true,
   dts: true,
 });

@@ -2,18 +2,5 @@
   "name": "@clock-ui/styles",
   "version": "0.1.0",
   "private": true,
-  "description": "Core styles for Clock UI components — including themes, variables, and shared CSS utilities.",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    "./base.css": "./dist/base.css"
-  },
-  "scripts": {
-    "build": "node build.mjs"
-  },
-  "devDependencies": {
-    "lightningcss": "^1.30.2"
-  }
+  "type": "module"
 }

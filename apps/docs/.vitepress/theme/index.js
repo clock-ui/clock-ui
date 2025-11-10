@@ -1,6 +1,6 @@
 import DefaultTheme from "vitepress/theme";
 import { LiveClock, BaseClock } from "@clock-ui/vue";
-import "@clock-ui/vue/dist/index.css";
+import "@clock-ui/vue/base.css";
 import "./custom.css";
 
 export default {

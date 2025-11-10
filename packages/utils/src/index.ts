@@ -1,8 +1,18 @@
 import { getTime } from "./time";
-import { updateTickAnimation, type TickAnimationState } from "./animation";
+import {
+  updateTickAnimation,
+  type TickAnimationState,
+  easeOutBack,
+} from "./animation";
 import { calculateAngles, type ClockAngles } from "./calculations";
 
 export * from "./calculations";
+export { getTime } from "./time";
+export {
+  updateTickAnimation,
+  easeOutBack,
+  type TickAnimationState,
+} from "./animation";
 
 export interface ClockOptions {
   timezone?: string | undefined;
@@ -48,7 +58,7 @@ export class ClockFace {
       this.state.hours,
       this.state.minutes,
       this.state.seconds,
-      this.state.milliseconds
+      this.state.milliseconds,
     );
   }
 }
@@ -112,7 +122,7 @@ export class ClockWork {
     const interpolatedSeconds = updateTickAnimation(
       this.state.seconds,
       targetSecond,
-      this.tickAnimationState
+      this.tickAnimationState,
     );
     this.state.seconds = interpolatedSeconds;
 
