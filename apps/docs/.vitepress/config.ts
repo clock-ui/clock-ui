@@ -3,6 +3,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Clock UI",
   useWebFonts: true,
+  base: "/clock-ui/",
 
   description: "A clock component library for DOM, React, and Vue",
   head: [
