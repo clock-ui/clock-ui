@@ -26,19 +26,12 @@
         "vitepress": "^1.6.3",
       },
     },
-    "config": {
-      "name": "config",
-      "version": "0.0.0",
-    },
     "packages/dom": {
       "name": "@clock-ui/dom",
       "version": "0.1.0",
       "dependencies": {
         "@clock-ui/styles": "workspace:*",
         "@clock-ui/utils": "workspace:*",
-      },
-      "devDependencies": {
-        "config": "workspace:*",
       },
     },
     "packages/react": {
@@ -56,7 +49,6 @@
         "@types/react-dom": "^19.2.2",
         "@vitejs/plugin-react": "^5.1.0",
         "classnames": "^2.5.1",
-        "config": "workspace:*",
       },
       "peerDependencies": {
         "react": "^19.2.0",
@@ -81,7 +73,6 @@
       "devDependencies": {
         "@vitejs/plugin-vue": "^6.0.1",
         "@vue/test-utils": "^2.4.6",
-        "config": "workspace:*",
         "vue": "^3.5.24",
         "vue-tsc": "^3.1.3",
       },
@@ -590,8 +581,6 @@
     "commander": ["commander@10.0.1", "", {}, "sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug=="],
 
     "confbox": ["confbox@0.2.2", "", {}, "sha512-1NB+BKqhtNipMsov4xI/NnhCKp9XG9NamYp5PVm9klAT0fsrNPjaFICsCFhNhwZJKNh7zB/3q8qXz0E9oaMNtQ=="],
-
-    "config": ["config@workspace:config"],
 
     "config-chain": ["config-chain@1.1.13", "", { "dependencies": { "ini": "^1.3.4", "proto-list": "~1.2.1" } }, "sha512-qj+f8APARXHrM0hraqXYb2/bOVSV4PvJQlNZ/DVj0QrmNM2q2euizkeuVckQ57J+W0mRH6Hvi+k50M4Jul2VRQ=="],
 

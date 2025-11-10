@@ -40,8 +40,5 @@
   "dependencies": {
     "@clock-ui/styles": "workspace:*",
     "@clock-ui/utils": "workspace:*"
-  },
-  "devDependencies": {
-    "config": "workspace:*"
   }
 }
