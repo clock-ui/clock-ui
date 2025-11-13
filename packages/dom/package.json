@@ -1,6 +1,6 @@
 {
   "name": "@clock-ui/dom",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vanilla DOM-based clock components with built-in rendering and styling support.",
   "type": "module",
   "license": "MIT",
@@ -37,7 +37,7 @@
     "release": "bumpp && bun publish --access public",
     "prepublishOnly": "bun run build"
   },
-  "dependencies": {
+  "devDependencies": {
     "@clock-ui/styles": "workspace:*",
     "@clock-ui/utils": "workspace:*"
   }

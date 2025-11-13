@@ -16,7 +16,6 @@ export default defineConfig({
     },
   },
   target: "chrome100",
-  noExternal: [/^@clock-ui\/.*/],
   plugins: [
     LightningCSS({
       options: {
