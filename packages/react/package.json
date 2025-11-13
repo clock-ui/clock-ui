@@ -1,6 +1,6 @@
 {
   "name": "@clock-ui/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React components for Clock UI, providing live and static clock widgets built with React and hooks for reactive time updates.",
   "type": "module",
   "license": "MIT",
@@ -43,11 +43,9 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
-  "dependencies": {
-    "@clock-ui/styles": "workspace:*",
-    "@clock-ui/utils": "workspace:*"
-  },
   "devDependencies": {
+    "@clock-ui/styles": "workspace:*",
+    "@clock-ui/utils": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@tsconfig/strictest": "^2.0.7",
