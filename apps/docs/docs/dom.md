@@ -32,7 +32,10 @@ You can also use Clock UI directly from a CDN without installation. This is perf
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clock UI CDN Example</title>
     <!-- Include Clock UI CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/@clock-ui/dom/base.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@clock-ui/dom/dist/index.css"
+    />
   </head>
   <body>
     <!-- Clock containers -->
@@ -40,7 +43,7 @@ You can also use Clock UI directly from a CDN without installation. This is perf
     <div id="live-clock" style="width: 200px; height: 200px;"></div>
 
     <!-- Include Clock UI JavaScript -->
-    <script src="https://unpkg.com/@clock-ui/dom/dist/index.js"></script>
+    <script src="https://unpkg.com/@clock-ui/dom/dist/index.umd.js"></script>
     <script>
       // Static clock
       const staticClock = new clockui.LiveClockUI("#static-clock", {
@@ -72,11 +75,11 @@ You can also use Clock UI directly from a CDN without installation. This is perf
 <!-- CSS -->
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@clock-ui/styles@latest/base.css"
+  href="https://cdn.jsdelivr.net/npm/@clock-ui/dom/dist/index.css"
 />
 
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/@clock-ui/dom@latest/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@clock-ui/dom/dist/index.umd.js"></script>
 ```
 
 ### Specific Version
@@ -85,9 +88,9 @@ You can also use Clock UI directly from a CDN without installation. This is perf
 <!-- Use a specific version for production -->
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@clock-ui/styles@0.1.0/base.css"
+  href="https://unpkg.com/@clock-ui/dom@0.1.1/dist/index.css"
 />
-<script src="https://unpkg.com/@clock-ui/dom@0.1.0/dist/index.js"></script>
+<script src="https://unpkg.com/@clock-ui/dom@0.1.1/dist/index.umd.js"></script>
 ```
 
 ### CDN with ES Modules
@@ -99,13 +102,16 @@ You can also use Clock UI directly from a CDN without installation. This is perf
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clock UI ES Modules</title>
-    <link rel="stylesheet" href="https://unpkg.com/@clock-ui/styles/base.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@clock-ui/dom/dist/index.css"
+    />
   </head>
   <body>
     <div id="clock" style="width: 200px; height: 200px;"></div>
 
     <script type="module">
-      import { LiveClockUI } from "https://unpkg.com/@clock-ui/dom/dist/index.js";
+      import { LiveClockUI } from "https://unpkg.com/@clock-ui/dom/dist/index.umd.js";
 
       const clock = new LiveClockUI("#clock", {
         timezone: "Europe/London",
@@ -126,8 +132,8 @@ You can also use Clock UI directly from a CDN without installation. This is perf
 ```html
 <div id="clock" style="width: 200px; height: 200px;"></div>
 
-<script src="https://unpkg.com/@clock-ui/dom/dist/index.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@clock-ui/styles/base.css" />
+<script src="https://unpkg.com/@clock-ui/dom/dist/index.umd.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@clock-ui/dom/dist/index.css" />
 
 <script>
   const clock = new clockui.LiveClockUI("#clock", {
