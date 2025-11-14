@@ -8,7 +8,17 @@ React components for Clock UI, providing live and static clock widgets built wit
 ## Installation
 
 ```bash
+# npm
 npm install @clock-ui/react
+
+# yarn
+yarn add @clock-ui/react
+
+# pnpm
+pnpm add @clock-ui/react
+
+# bun
+bun add @clock-ui/react
 ```
 
 ## Usage
@@ -95,7 +105,7 @@ A static clock component for displaying specific times.
 The components use CSS custom properties for theming. Import the CSS file to apply default styles:
 
 ```tsx
-import "@clock-ui/react/dist/index.css";
+import "@clock-ui/react/base.css";
 ```
 
 ## Examples

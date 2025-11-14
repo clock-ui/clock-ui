@@ -5,13 +5,17 @@ Vue components for Clock UI, providing reactive clock widgets built with Vue 3 a
 ## Installation
 
 ```bash
+# npm
 npm install @clock-ui/vue
-```
 
-or
+# yarn
+yarn add @clock-ui/vue
 
-```bash
+# pnpm
 pnpm add @clock-ui/vue
+
+# bun
+bun add @clock-ui/vue
 ```
 
 ## Usage
@@ -27,6 +31,7 @@ A real-time clock component that displays the current time.
 
 <script setup>
 import { LiveClock } from "@clock-ui/vue";
+import "@clock-ui/dom/base.css";
 </script>
 ```
 
@@ -41,6 +46,7 @@ A static clock component that displays a specific time.
 
 <script setup>
 import { BaseClock } from "@clock-ui/vue";
+import "@clock-ui/dom/base.css";
 </script>
 ```
 
