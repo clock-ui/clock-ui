@@ -5,7 +5,17 @@ Vanilla DOM-based clock components with built-in rendering and styling support.
 ## Installation
 
 ```bash
+# npm
 npm install @clock-ui/dom
+
+# yarn
+yarn add @clock-ui/dom
+
+# pnpm
+pnpm add @clock-ui/dom
+
+# bun
+bun add @clock-ui/dom
 ```
 
 ## Usage
@@ -18,7 +28,7 @@ npm install @clock-ui/dom
 
 ```js
 import { LiveClockUI } from "@clock-ui/dom";
-import "@clock-ui/dom/dist/index.css";
+import "@clock-ui/dom/base.css";
 
 const clock = new LiveClockUI("#clock", {
   hideSeconds: false,
@@ -37,7 +47,7 @@ const clock = new LiveClockUI("#clock", {
 
 ```js
 import { BaseClockUI } from "@clock-ui/dom";
-import "@clock-ui/dom/dist/index.css";
+import "@clock-ui/dom/base.css";
 
 const staticClock = new BaseClockUI("#static-clock", {
   hours: 3,
@@ -55,9 +65,9 @@ Include the CSS and JavaScript from a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@clock-ui/dom@0.1.0/dist/index.css"
+  href="https://unpkg.com/@clock-ui/dom@0.1.1/dist/index.css"
 />
-<script src="https://unpkg.com/@clock-ui/dom@0.1.0/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@clock-ui/dom@0.1.1/dist/index.umd.js"></script>
 ```
 
 ### Live Clock
@@ -137,11 +147,11 @@ Extends CommonClockOptions with:
 The component includes built-in CSS. Import it to apply default styles:
 
 ```js
-import "@clock-ui/dom/dist/index.css";
+import "@clock-ui/dom/base.css";
 ```
 
 Customize appearance by overriding CSS variables or classes.
 
 ## License
 
-MIT
+MIT © [Robert Latamaosadi](https://github.com/clock-ui/clock-ui)
