@@ -31,6 +31,9 @@ export default defineConfig({
   ],
   themeConfig: {
     logo: "/logo.svg",
+    search: {
+      provider: "local",
+    },
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/docs/getting-started" },
@@ -72,6 +75,11 @@ export default defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/clock-ui/clock-ui" },
     ],
+
+    footer: {
+      message: "Released under the MIT License.",
+      copyright: "Copyright © 2025-present Clock UI",
+    },
   },
 
   vite: {
