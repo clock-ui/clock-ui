@@ -1,6 +1,6 @@
 {
   "name": "@clock-ui/vue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Vue components for Clock UI, providing reactive clock widgets built with Vue 3 and Composition API.",
   "type": "module",
   "license": "MIT",

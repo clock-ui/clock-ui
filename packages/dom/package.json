@@ -1,6 +1,6 @@
 {
   "name": "@clock-ui/dom",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Vanilla DOM-based clock components with built-in rendering and styling support.",
   "type": "module",
   "license": "MIT",
