@@ -2,7 +2,6 @@ import { getTime } from "./time";
 import {
   updateTickAnimation,
   type TickAnimationState,
-  easeOutBack,
 } from "./animation";
 import { calculateAngles, type ClockAngles } from "./calculations";
 
@@ -11,11 +10,28 @@ export { getTime } from "./time";
 export {
   updateTickAnimation,
   easeOutBack,
+  DEFAULT_TICK_DURATION,
   type TickAnimationState,
 } from "./animation";
 
+/** How often tick mode re-reads the wall clock, in milliseconds */
+const TICK_READ_INTERVAL = 100;
+
 export interface ClockOptions {
   timezone?: string | undefined;
+
+  /**
+   * When true, the second hand snaps straight to each second instead of
+   * easing into it. Set this from `prefers-reduced-motion`.
+   */
+  reducedMotion?: boolean | undefined;
+
+  /**
+   * How long the second hand takes to swing to the next mark, in
+   * milliseconds. Defaults to {@link DEFAULT_TICK_DURATION}. `0` snaps with
+   * no swing. Tick mode only — sweep mode is continuous.
+   */
+  tickDuration?: number | undefined;
 }
 
 export interface TimeState {
@@ -68,6 +84,8 @@ export class ClockWork {
   private options: ClockOptions;
   private state: TimeState;
   private tickAnimationState: TickAnimationState;
+  private tickTime: Date | null = null;
+  private tickTimeRead = 0;
 
   /**
    * Create a clock work
@@ -95,6 +113,30 @@ export class ClockWork {
   }
 
   /**
+   * Read the wall clock, reusing the previous reading for up to
+   * TICK_READ_INTERVAL milliseconds.
+   *
+   * Callers that only care about whole seconds (or the date) do not need a
+   * fresh reading on every animation frame, and a timezone-aware read costs a
+   * toLocaleString round-trip. Sweep mode deliberately bypasses this.
+   *
+   * @returns {Date} Current time, possibly cached
+   */
+  private readClockThrottled(): Date {
+    const stamp = performance.now();
+
+    if (
+      this.tickTime === null ||
+      stamp - this.tickTimeRead >= TICK_READ_INTERVAL
+    ) {
+      this.tickTime = getTime(this.options.timezone);
+      this.tickTimeRead = stamp;
+    }
+
+    return this.tickTime;
+  }
+
+  /**
    * Update time by milliseconds (Sweep Mode)
    *
    * @returns {void}
@@ -104,8 +146,7 @@ export class ClockWork {
     this.state.hours = time.getHours();
     this.state.minutes = time.getMinutes();
     this.state.seconds = time.getSeconds();
-    const now = new Date();
-    this.state.milliseconds = now.getMilliseconds() - 500;
+    this.state.milliseconds = time.getMilliseconds();
   }
 
   /**
@@ -114,21 +155,44 @@ export class ClockWork {
    * @returns {void}
    */
   updateTick(): void {
-    const time = getTime(this.options.timezone);
+    // Every UTC offset is a whole number of minutes, so seconds and
+    // milliseconds are identical in every timezone. The second boundary can
+    // therefore be detected from a plain Date, without paying for a
+    // toLocaleString conversion on each frame — and without the detection
+    // latency that throttling that conversion would add.
+    const targetSecond = new Date().getSeconds();
 
-    const targetSecond = time.getSeconds();
+    // All of this clock's motion is JS-driven, so honouring reduced motion
+    // means skipping the easing entirely rather than dropping a CSS
+    // transition. Snapping also removes the need to defer the minute
+    // rollover, since there is no animation left to wait for.
+    if (this.options.reducedMotion) {
+      const time = this.readClockThrottled();
+      this.state.seconds = targetSecond;
+      this.state.minutes = time.getMinutes();
+      this.state.hours = time.getHours();
+      this.state.milliseconds = 0;
+      return;
+    }
 
     // Tick animation
     const interpolatedSeconds = updateTickAnimation(
       this.state.seconds,
       targetSecond,
       this.tickAnimationState,
+      this.options.tickDuration,
     );
     this.state.seconds = interpolatedSeconds;
 
-    // Update hours and minutes at the start of each minute
+    // Update hours and minutes only once the second hand has finished easing
+    // up to 12. Rolling the minute over early would jump the minute hand a
+    // near-full minute ahead, because calculateAngles derives the minute
+    // angle from `minutes + seconds / 60` and `seconds` is still ~59 here.
     const isStartOfMinute = this.state.seconds >= 0 && this.state.seconds <= 1;
     if (isStartOfMinute) {
+      // Hours and minutes do depend on the timezone, but only change once a
+      // minute, so this is the one place worth converting.
+      const time = this.readClockThrottled();
       this.state.minutes = time.getMinutes();
       this.state.hours = time.getHours();
     }
@@ -150,8 +214,7 @@ export class ClockWork {
    * @returns {number} Current date
    */
   getCurrentDate(): number {
-    const time = getTime(this.options.timezone);
-    return time.getDate();
+    return this.readClockThrottled().getDate();
   }
 
   /**
@@ -163,6 +226,19 @@ export class ClockWork {
    * @returns {void}
    */
   setOptions(options: Partial<ClockOptions>): void {
+    const previousTimezone = this.options.timezone;
     this.options = { ...this.options, ...options };
+
+    // Only the timezone invalidates a cached reading, and this runs per frame.
+    if (this.options.timezone !== previousTimezone) {
+      this.tickTime = null;
+
+      // Tick mode otherwise only refreshes hours and minutes at the start of a
+      // minute, so switching zone would keep showing the old time for up to a
+      // minute. A zone change is an explicit action — reflect it now.
+      const time = getTime(this.options.timezone);
+      this.state.hours = time.getHours();
+      this.state.minutes = time.getMinutes();
+    }
   }
 }

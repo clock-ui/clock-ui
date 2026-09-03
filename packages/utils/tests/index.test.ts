@@ -10,6 +10,8 @@ import {
   getTime,
   easeOutBack,
   updateTickAnimation,
+  formatClockLabel,
+  DEFAULT_TICK_DURATION,
 } from "../src";
 
 describe("calculations", () => {
@@ -200,5 +202,149 @@ describe("ClockWork", () => {
     expect(typeof date).toBe("number");
     expect(date).toBeGreaterThan(0);
     expect(date).toBeLessThanOrEqual(31);
+  });
+});
+
+describe("accuracy regressions", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("does not drop the sub-second term when milliseconds is exactly 0", () => {
+    // A falsy check here used to fall through to whole seconds, snapping the
+    // hand forward for one frame every time the clock read ms === 0.
+    expect(calculateAngles(0, 0, 10, 0).second).toBe(60);
+    expect(calculateAngles(0, 0, 10, 500).second).toBe(63);
+  });
+
+  it("sweeps in step with the wall clock, with no half-second offset", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 20, 250));
+
+    const clock = new ClockWork({});
+    clock.updateSweep();
+
+    const state = clock.getState();
+    expect(state.seconds).toBe(20);
+    expect(state.milliseconds).toBe(250);
+
+    // 20.25s * 6deg — the hand sits where the clock actually is.
+    expect(calculateAngles(
+      state.hours,
+      state.minutes,
+      state.seconds,
+      state.milliseconds,
+    ).second).toBeCloseTo(121.5);
+  });
+
+  it("keeps milliseconds when a timezone is applied", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 20, 250));
+
+    // toLocaleString truncates to whole seconds; without restoring the
+    // sub-second part a timezone-aware clock can never sweep smoothly.
+    expect(getTime("UTC").getMilliseconds()).toBe(250);
+    expect(getTime("Asia/Tokyo").getMilliseconds()).toBe(250);
+  });
+
+  it("snaps instead of easing when reducedMotion is set", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 45, 0));
+
+    const eased = new ClockWork({});
+    const snapped = new ClockWork({ reducedMotion: true });
+
+    // Advance past the cached-read window so both pick up the new second.
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 46, 0));
+    vi.advanceTimersByTime(200);
+
+    eased.updateTick();
+    snapped.updateTick();
+
+    // The eased clock is still travelling towards :46; the snapped one is there.
+    expect(snapped.getState().seconds).toBe(46);
+    expect(eased.getState().seconds).not.toBe(46);
+  });
+});
+
+describe("formatClockLabel", () => {
+  it("renders a 12-hour reading with padded minutes", () => {
+    expect(formatClockLabel(14, 30)).toBe("2:30");
+    expect(formatClockLabel(9, 5)).toBe("9:05");
+  });
+
+  it("renders midnight and noon as 12", () => {
+    expect(formatClockLabel(0, 0)).toBe("12:00");
+    expect(formatClockLabel(12, 0)).toBe("12:00");
+  });
+
+  it("floors fractional minutes from the tick interpolation", () => {
+    expect(formatClockLabel(3, 7.94)).toBe("3:07");
+  });
+});
+
+describe("tickDuration", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("defaults to DEFAULT_TICK_DURATION", () => {
+    expect(DEFAULT_TICK_DURATION).toBe(600);
+  });
+
+  it("reaches the target sooner with a shorter duration", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 20, 0));
+
+    const slow = new ClockWork({ tickDuration: 600 });
+    const fast = new ClockWork({ tickDuration: 150 });
+
+    // Move to the next second, then sample 200ms into the swing.
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 21, 0));
+    slow.updateTick();
+    fast.updateTick();
+    vi.advanceTimersByTime(200);
+    slow.updateTick();
+    fast.updateTick();
+
+    const distance = (c: ClockWork) => Math.abs(c.getState().seconds - 21);
+
+    // The fast clock has arrived; the slow one is still travelling.
+    expect(distance(fast)).toBeLessThan(distance(slow));
+  });
+
+  it("snaps with no swing when the duration is 0", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 20, 0));
+
+    const clock = new ClockWork({ tickDuration: 0 });
+    clock.updateTick();
+
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 21, 0));
+    clock.updateTick();
+
+    expect(clock.getState().seconds).toBe(21);
+  });
+});
+
+describe("timezone switching", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("reflects a timezone change immediately in tick mode", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 20, 0));
+
+    const clock = new ClockWork({});
+    clock.updateTick();
+    const localHours = clock.getState().hours;
+
+    // Tick mode only refreshes hours/minutes at the start of a minute, so
+    // without an explicit refresh this would lag by up to 60 seconds.
+    clock.setOptions({ timezone: "UTC" });
+
+    expect(clock.getState().hours).not.toBe(localHours);
+    expect(clock.getState().hours).toBe(new Date().getUTCHours());
   });
 });
