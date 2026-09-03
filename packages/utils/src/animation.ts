@@ -10,8 +10,14 @@ export function easeOutBack(progress: number): number {
 
 // Constants for tick animation
 const DEGREES_PER_SECOND = 6; // 360° / 60 seconds
-const ANIMATION_DURATION = 600; // Animation duration in milliseconds
 const SECONDS_IN_MINUTE = 60;
+
+/**
+ * How long the second hand takes to swing to the next mark, in milliseconds.
+ * A real quartz movement lands in roughly 50-150ms; the default is slower and
+ * bouncier on purpose.
+ */
+export const DEFAULT_TICK_DURATION = 600;
 
 export interface TickAnimationState {
   lastSecond: number;
@@ -26,13 +32,15 @@ export interface TickAnimationState {
  * @param {number} currentSeconds - current seconds
  * @param {number} targetSecond - target seconds
  * @param {TickAnimationState} animationState - current animation state
+ * @param {number} [duration] - swing duration in milliseconds; 0 snaps instantly
  *
- * @returns {number} css drop shadow filter value
+ * @returns {number} interpolated seconds value
  */
 export function updateTickAnimation(
   currentSeconds: number,
   targetSecond: number,
-  animationState: TickAnimationState
+  animationState: TickAnimationState,
+  duration: number = DEFAULT_TICK_DURATION
 ): number {
   // Initialize animation when second changes
   if (targetSecond !== animationState.lastSecond) {
@@ -44,9 +52,10 @@ export function updateTickAnimation(
     animationState.animationStart = performance.now();
   }
 
-  // Calculate animation progress
+  // Calculate animation progress. A non-positive duration means "no swing",
+  // which would otherwise divide by zero.
   const elapsed = performance.now() - animationState.animationStart;
-  const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+  const progress = duration > 0 ? Math.min(elapsed / duration, 1) : 1;
   const eased = easeOutBack(progress);
 
   // Calculate interpolated position with easing

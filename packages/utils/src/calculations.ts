@@ -100,7 +100,8 @@ export function calculateAngles(
   milliseconds?: number
 ): ClockAngles {
   // Calculate precise second position including milliseconds
-  const secondFraction = milliseconds ? seconds + milliseconds / 1000 : seconds;
+  const secondFraction =
+    milliseconds !== undefined ? seconds + milliseconds / 1000 : seconds;
   const realSeconds = secondFraction % 60;
 
   // Calculate angles for each hand
@@ -154,4 +155,20 @@ export function calculateShadow(
   const blurRadius = (width / BLUR_RATIO) * (distance / 8);
 
   return `drop-shadow(${shadowX}px ${shadowY}px ${blurRadius}px rgba(0,0,0,${SHADOW_OPACITY}))`;
+}
+
+/**
+ * Format a clock reading as an accessible label, e.g. "2:30".
+ *
+ * An analog face carries no AM/PM information, so the label does not claim any.
+ *
+ * @param {number} hours - Hours of the clock hand
+ * @param {number} minutes - Minutes of the clock hand
+ *
+ * @returns {string} Human-readable time for use in aria-label
+ */
+export function formatClockLabel(hours: number, minutes: number): string {
+  const hour12 = hours % 12 === 0 ? 12 : hours % 12;
+  const padded = String(Math.floor(minutes)).padStart(2, "0");
+  return `${hour12}:${padded}`;
 }
