@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock UI — vanilla example</title>
+  </head>
+  <body>
+    <h1>Clock UI — vanilla JS</h1>
+    <p class="lede">
+      The left half uses the imperative API from <code>@clock-ui/dom</code>. The
+      right half is the <code>&lt;clock-ui&gt;</code> custom element — the same
+      clock, usable from Svelte, Solid, Angular, Astro or plain HTML.
+    </p>
+
+    <h2>Imperative API</h2>
+    <div class="grid">
+      <figure>
+        <div class="clock" id="sweep"></div>
+        <figcaption>Live · smooth sweep</figcaption>
+      </figure>
+      <figure>
+        <div class="clock" id="tick"></div>
+        <figcaption>Live · ticking</figcaption>
+      </figure>
+      <figure>
+        <div class="clock" id="static"></div>
+        <figcaption>Static · 10:09</figcaption>
+      </figure>
+      <figure>
+        <div class="clock theme-midnight" id="themed"></div>
+        <figcaption>Themed · midnight</figcaption>
+      </figure>
+      <figure>
+        <div class="clock" id="zoned"></div>
+        <figcaption>
+          <select id="zone">
+            <option value="">Local</option>
+            <option value="America/New_York">New York</option>
+            <option value="Europe/London">London</option>
+            <option value="Asia/Tokyo">Tokyo</option>
+          </select>
+        </figcaption>
+      </figure>
+    </div>
+
+    <h2>&lt;clock-ui&gt; custom element</h2>
+    <div class="grid">
+      <figure>
+        <clock-ui class="clock" smooth-sweep></clock-ui>
+        <figcaption>smooth-sweep</figcaption>
+      </figure>
+      <figure>
+        <clock-ui class="clock theme-vintage" use-roman></clock-ui>
+        <figcaption>use-roman</figcaption>
+      </figure>
+      <figure>
+        <clock-ui class="clock" hours="10" minutes="9" cardinal-only no-border>
+        </clock-ui>
+        <figcaption>static · cardinal-only</figcaption>
+      </figure>
+      <figure>
+        <clock-ui class="clock" timezone="Asia/Tokyo" tick-duration="150">
+        </clock-ui>
+        <figcaption>timezone + tick-duration</figcaption>
+      </figure>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

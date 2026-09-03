@@ -2,15 +2,22 @@
   "name": "clock-ui",
   "private": true,
   "scripts": {
-    "build": "turbo run build --filter=@clock-ui/*",
+    "build": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "docs:build": "turbo run build --filter=docs",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
+    "typecheck": "turbo run typecheck",
     "changeset": "changeset",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "example:react": "turbo run dev --filter=@clock-ui/example-react",
+    "example:vue": "turbo run dev --filter=@clock-ui/example-vue",
+    "example:vanilla": "turbo run dev --filter=@clock-ui/example-vanilla",
+    "example:svelte": "turbo run dev --filter=@clock-ui/example-svelte",
+    "example:solid": "turbo run dev --filter=@clock-ui/example-solid",
+    "example:astro": "turbo run dev --filter=@clock-ui/example-astro",
+    "smoke": "bun run --cwd examples/vanilla build && node scripts/smoke-examples.mjs"
   },
   "engines": {
     "node": ">=18"
@@ -18,7 +25,8 @@
   "packageManager": "bun@1.3.0",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.29.7",

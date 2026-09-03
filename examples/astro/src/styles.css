@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 2.5rem 1.5rem 4rem;
+  background: #fafaf8;
+  color: #13293d;
+}
+
+h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.6rem;
+}
+
+.lede {
+  margin: 0 0 2.5rem;
+  color: #6b7280;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 2.5rem;
+  max-width: 980px;
+}
+
+figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+figcaption {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a8f98;
+  text-align: center;
+}
+
+.clock {
+  width: 100%;
+  max-width: 190px;
+}
+
+/* Themes, to show that everything is a CSS custom property. */
+.theme-midnight {
+  --cui-bg-color: #1f1a38;
+  --cui-primary-color: #ead7d1;
+  --cui-secondary-color: #1f1a38;
+  --cui-accent-color: #dd99bb;
+}
+
+.theme-vintage {
+  --cui-bg-color: #f4ecd8;
+  --cui-primary-color: #3b2f1e;
+  --cui-secondary-color: #f4ecd8;
+  --cui-accent-color: #8c2f1b;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #14161a;
+    color: #e8ebe4;
+  }
+}
