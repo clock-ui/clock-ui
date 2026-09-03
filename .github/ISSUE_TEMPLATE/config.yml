@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://clock-ui.github.io/clock-ui/
+    about: Props, theming variables, and recipes.
+  - name: Playground
+    url: https://clock-ui.github.io/clock-ui/docs/playground
+    about: Try every prop and theme variable before filing.

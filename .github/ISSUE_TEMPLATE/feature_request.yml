@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest a prop, a theme hook, or framework support.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the goal, not just the API you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Can you do it today with CSS custom properties?
+      description: >
+        Most appearance changes are reachable through the --cui-* variables.
+        If you tried and it did not work, say what fell short.
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you add?
