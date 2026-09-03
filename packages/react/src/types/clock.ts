@@ -3,6 +3,18 @@
  */
 export interface CommonClockProps {
   /**
+   * Applied to the clock's root element, alongside its own classes. This is
+   * how you theme a clock — the --cui-* custom properties are read from here.
+   */
+  className?: string;
+
+  /**
+   * Inline styles for the root element. Merged with the internal sizing
+   * variable rather than replacing it.
+   */
+  style?: React.CSSProperties;
+
+  /**
    * Whether to hide the seconds hand. Defaults to false.
    * When true, the second hand will not be rendered.
    */
@@ -84,6 +96,11 @@ export interface BaseClockProps extends CommonClockProps {
    * Used for smooth second hand animation in live clocks.
    */
   milliseconds?: number;
+
+  /**
+   * Content rendered inside the clock face's info window, e.g. the date.
+   */
+  children?: React.ReactNode;
 }
 
 /**
@@ -104,8 +121,14 @@ export interface LiveClockProps extends CommonClockProps {
   timezone?: string;
 
   /**
-   * Whether to hide the date display. Defaults to false.
-   * Note: Date display functionality may not be implemented in all versions.
+   * Whether to hide the date window on the clock face. Defaults to false.
    */
   hideDate?: boolean;
+
+  /**
+   * How long the second hand takes to swing to each new mark, in
+   * milliseconds. Defaults to 600. `0` snaps with no swing. Ignored in
+   * sweep mode, which moves continuously.
+   */
+  tickDuration?: number;
 }

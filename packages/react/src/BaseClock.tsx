@@ -4,6 +4,7 @@ import classnames from "classnames";
 import {
   calculateShadow,
   ClockFace,
+  formatClockLabel,
   getHoursToDisplay,
   getTicksToDisplay,
   romanNumerals,
@@ -23,17 +24,12 @@ export const BaseClock: React.FC<BaseClockProps> = ({
   hideMajorTicks,
   hideTicks,
   dualTone = true,
+  className,
+  style,
+  children,
 }) => {
   const clockRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(0);
-
-  const [hourAngle, setHourAngle] = useState(0);
-  const [minuteAngle, setMinuteAngle] = useState(0);
-  const [secondAngle, setSecondAngle] = useState(0);
-
-  const [hourShadow, setHourShadow] = useState("");
-  const [minuteShadow, setMinuteShadow] = useState("");
-  const [secondShadow, setSecondShadow] = useState("");
 
   useEffect(() => {
     if (!clockRef.current) return;
@@ -56,32 +52,36 @@ export const BaseClock: React.FC<BaseClockProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    const clockFace = new ClockFace({ hours, minutes, seconds, milliseconds });
+  // Angles and shadows are pure functions of the props plus the measured
+  // width, so they are derived during render. Holding them in state would
+  // cost an extra render pass per frame and lag the shadows by one frame.
+  const angles = new ClockFace({
+    hours,
+    minutes,
+    seconds,
+    milliseconds,
+  }).getAngles();
 
-    const angles = clockFace.getAngles();
-
-    // Calculate angles for each hand
-    setHourAngle(angles.hour);
-    setMinuteAngle(angles.minute);
-    setSecondAngle(angles.second);
-
-    // Update shadows for each hand
-    setHourShadow(calculateShadow(hourAngle, width));
-    setMinuteShadow(calculateShadow(minuteAngle, width));
-    setSecondShadow(calculateShadow(secondAngle, width, 8));
-  });
+  const hourShadow = calculateShadow(angles.hour, width);
+  const minuteShadow = calculateShadow(angles.minute, width);
+  const secondShadow = calculateShadow(angles.second, width, 8);
 
   return (
     <div
-      className={classnames("clock-ui", {
-        "clock-ui--roman": useRoman,
-        "clock-ui--bordered": !noBorder,
-        "clock-ui--dual-tone": dualTone,
-      })}
-      style={{ "--cui-width": width } as React.CSSProperties}
+      className={classnames(
+        "clock-ui",
+        {
+          "clock-ui--roman": useRoman,
+          "clock-ui--bordered": !noBorder,
+          "clock-ui--dual-tone": dualTone,
+        },
+        className,
+      )}
+      style={{ ...style, "--cui-width": width } as React.CSSProperties}
+      role="img"
+      aria-label={formatClockLabel(hours, minutes)}
     >
-      <div ref={clockRef} className="clock-ui__face">
+      <div ref={clockRef} className="clock-ui__face" aria-hidden="true">
         {!hideTicks &&
           getTicksToDisplay({
             major: !hideMajorTicks,
@@ -109,11 +109,17 @@ export const BaseClock: React.FC<BaseClockProps> = ({
             </div>
           ))}
 
+        {children && (
+          <div className="clock-ui__info">
+            {children}
+          </div>
+        )}
+
         <div
           className="clock-ui__hand--hour clock-ui__hand"
           style={
             {
-              "--angle": hourAngle,
+              "--angle": angles.hour,
               filter: hourShadow,
             } as React.CSSProperties
           }
@@ -123,7 +129,7 @@ export const BaseClock: React.FC<BaseClockProps> = ({
           className="clock-ui__hand--minute clock-ui__hand"
           style={
             {
-              "--angle": minuteAngle,
+              "--angle": angles.minute,
               filter: minuteShadow,
             } as React.CSSProperties
           }
@@ -134,7 +140,7 @@ export const BaseClock: React.FC<BaseClockProps> = ({
             className="clock-ui__hand--second clock-ui__hand"
             style={
               {
-                "--angle": secondAngle,
+                "--angle": angles.second,
                 filter: secondShadow,
               } as React.CSSProperties
             }
