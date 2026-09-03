@@ -1,6 +1,7 @@
 import "@clock-ui/styles/src/clock-ui.css";
 import {
   calculateShadow,
+  formatClockLabel,
   ClockFace,
   ClockWork,
   getHoursToDisplay,
@@ -36,6 +37,12 @@ export interface CommonClockOptions {
  * Options for the base clock component.
  */
 export interface BaseClockOptions extends CommonClockOptions {
+  /**
+   * Text rendered inside the clock face's info window, e.g. the date.
+   * Omit or pass an empty string to hide the window.
+   */
+  info?: string;
+
   /** Hour to display (0-23) */
   hours: number;
   /** Minutes to display (0-59) */
@@ -50,6 +57,13 @@ export interface BaseClockOptions extends CommonClockOptions {
  * Options for the live clock component.
  */
 export interface LiveClockOptions extends CommonClockOptions {
+  /**
+   * How long the second hand takes to swing to each new mark, in
+   * milliseconds. Defaults to 600. `0` snaps with no swing. Ignored in
+   * sweep mode, which moves continuously.
+   */
+  tickDuration?: number;
+
   /** Smooth second hand movement */
   smoothSweep?: boolean;
   /** Timezone for the clock */
@@ -68,6 +82,20 @@ export class LiveClockUI {
   private domClock: BaseClockUI;
 
   private frameId: number | null = null;
+
+  /**
+   * A continuously sweeping hand is exactly what prefers-reduced-motion asks
+   * us not to do, so sweep mode falls back to ticking when the user opts out.
+   * The query is resolved once — `matches` stays live on the returned object.
+   */
+  private motionQuery: MediaQueryList | null =
+    typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+
+  private prefersReducedMotion(): boolean {
+    return this.motionQuery?.matches ?? false;
+  }
 
   /** Current hour */
   public hours = 0;
@@ -88,7 +116,10 @@ export class LiveClockUI {
     this.options = options;
 
     // Initialize ClockWork
-    this.clockWork = new ClockWork({ timezone: options.timezone });
+    this.clockWork = new ClockWork({
+      timezone: options.timezone,
+      tickDuration: options.tickDuration,
+    });
 
     // Initialize DomClock
     this.domClock = new BaseClockUI(el, {
@@ -111,7 +142,13 @@ export class LiveClockUI {
   }
 
   private updateTime() {
-    if (this.options.smoothSweep) {
+    const reducedMotion = this.prefersReducedMotion();
+    this.clockWork.setOptions({
+      reducedMotion,
+      tickDuration: this.options.tickDuration,
+    });
+
+    if (this.options.smoothSweep && !reducedMotion) {
       this.clockWork.updateSweep();
     } else {
       this.clockWork.updateTick();
@@ -132,6 +169,7 @@ export class LiveClockUI {
       minutes: this.minutes,
       seconds: this.seconds,
       milliseconds: this.milliseconds,
+      info: this.options.hideDate ? "" : String(this.currentDate),
     });
   }
 
@@ -164,7 +202,8 @@ export class LiveClockUI {
    * @param {string} timezone - The new timezone string
    */
   public setTimezone(timezone: string) {
-    this.clockWork = new ClockWork({ timezone });
+    this.options.timezone = timezone;
+    this.clockWork.setOptions({ timezone });
   }
 
   /**
@@ -189,6 +228,7 @@ export class BaseClockUI {
   private handHour!: HTMLElement;
   private handMinute!: HTMLElement;
   private handSecond?: HTMLElement | null;
+  private info!: HTMLElement;
 
   private angles = {
     hour: 0,
@@ -263,10 +303,14 @@ export class BaseClockUI {
     if (!p.noBorder) this.el.classList.add("clock-ui--bordered");
     if (p.dualTone) this.el.classList.add("clock-ui--dual-tone");
 
+    // The face is decorative; the readable time lives on the root's aria-label.
+    this.el.setAttribute("role", "img");
+
     this.el.innerHTML = `
-      <div class="clock-ui__face">
+      <div class="clock-ui__face" aria-hidden="true">
         ${!p.hideTicks ? this.renderTicks() : ""}
         ${!p.hideNumbers ? this.renderNumbers() : ""}
+        <div class="clock-ui__info"></div>
         <div class="clock-ui__hand clock-ui__hand--hour"></div>
         <div class="clock-ui__hand clock-ui__hand--minute"></div>
         ${!p.hideSeconds ? `<div class="clock-ui__hand clock-ui__hand--second"></div>` : ""}
@@ -283,6 +327,7 @@ export class BaseClockUI {
     this.handSecond = this.el.querySelector(
       ".clock-ui__hand--second"
     ) as HTMLElement | null;
+    this.info = this.el.querySelector(".clock-ui__info") as HTMLElement;
   }
 
   private renderTicks(): string {
@@ -348,6 +393,15 @@ export class BaseClockUI {
   }
 
   private applyStyles() {
+    this.el.setAttribute(
+      "aria-label",
+      formatClockLabel(this.options.hours, this.options.minutes)
+    );
+
+    const info = this.options.info ?? "";
+    this.info.textContent = info;
+    this.info.style.display = info ? "" : "none";
+
     this.handHour.style.setProperty("--angle", String(this.angles.hour));
     this.handHour.style.filter = this.shadows.hour;
 

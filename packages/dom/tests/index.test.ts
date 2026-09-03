@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi, beforeAll } from "vitest";
 import { BaseClockUI, LiveClockUI } from "../src";
 
 describe("BaseClockUI", () => {
@@ -218,5 +218,99 @@ describe("LiveClockUI", () => {
     expect(typeof clock.seconds).toBe("number");
     expect(typeof clock.milliseconds).toBe("number");
     expect(typeof clock.currentDate).toBe("number");
+  });
+});
+
+describe("<clock-ui> custom element", () => {
+  beforeAll(async () => {
+    await import("../src/element");
+  });
+
+  it("registers itself", () => {
+    expect(customElements.get("clock-ui")).toBeDefined();
+  });
+
+  it("renders a live clock and maps kebab-case boolean attributes", () => {
+    const el = document.createElement("clock-ui");
+    el.setAttribute("use-roman", "");
+    el.setAttribute("no-border", "");
+    document.body.appendChild(el);
+
+    expect(el.getAttribute("role")).toBe("img");
+    expect(el.classList.contains("clock-ui--roman")).toBe(true);
+    expect(el.classList.contains("clock-ui--bordered")).toBe(false);
+
+    el.remove();
+  });
+
+  it("renders a static clock when hours and minutes are given", () => {
+    const el = document.createElement("clock-ui");
+    el.setAttribute("hours", "10");
+    el.setAttribute("minutes", "9");
+    document.body.appendChild(el);
+
+    expect(el.getAttribute("aria-label")).toBe("10:09");
+
+    el.remove();
+  });
+
+  it('treats ="false" as false rather than as presence', () => {
+    const el = document.createElement("clock-ui");
+    el.setAttribute("dual-tone", "false");
+    document.body.appendChild(el);
+
+    expect(el.classList.contains("clock-ui--dual-tone")).toBe(false);
+
+    el.remove();
+  });
+});
+
+describe("<clock-ui> property reflection", () => {
+  beforeAll(async () => {
+    await import("../src/element");
+  });
+
+  it("reflects a property assignment onto the attribute", () => {
+    // Solid, Lit, Angular's [prop] binding and React 19 all set properties
+    // rather than attributes on custom elements.
+    const el = document.createElement("clock-ui") as HTMLElement & {
+      timezone?: string;
+    };
+    document.body.appendChild(el);
+
+    el.timezone = "Asia/Tokyo";
+    expect(el.getAttribute("timezone")).toBe("Asia/Tokyo");
+
+    el.remove();
+  });
+
+  it("reflects boolean properties both ways", () => {
+    const el = document.createElement("clock-ui") as HTMLElement & {
+      useRoman?: boolean;
+    };
+    document.body.appendChild(el);
+
+    el.useRoman = true;
+    expect(el.hasAttribute("use-roman")).toBe(true);
+    expect(el.classList.contains("clock-ui--roman")).toBe(true);
+
+    el.useRoman = false;
+    expect(el.hasAttribute("use-roman")).toBe(false);
+
+    el.remove();
+  });
+
+  it("reads a property back from the attribute", () => {
+    const el = document.createElement("clock-ui") as HTMLElement & {
+      tickDuration?: number;
+      hideDate?: boolean;
+    };
+    el.setAttribute("tick-duration", "150");
+    document.body.appendChild(el);
+
+    expect(el.tickDuration).toBe(150);
+    expect(el.hideDate).toBe(false);
+
+    el.remove();
   });
 });
