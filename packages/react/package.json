@@ -2,17 +2,39 @@
   "name": "@clock-ui/react",
   "version": "0.1.2",
   "description": "React components for Clock UI, providing live and static clock widgets built with React and hooks for reactive time updates.",
+  "keywords": [
+    "clock",
+    "analog-clock",
+    "analog",
+    "time",
+    "timezone",
+    "component",
+    "ui",
+    "css",
+    "typescript",
+    "zero-dependency",
+    "react",
+    "react-component",
+    "hooks"
+  ],
   "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com/clock-ui/clock-ui#readme",
+  "homepage": "https://clock-ui.github.io/clock-ui/",
   "bugs": {
     "url": "https://github.com/clock-ui/clock-ui/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clock-ui/clock-ui.git"
+    "url": "git+https://github.com/clock-ui/clock-ui.git",
+    "directory": "packages/react"
   },
   "author": "Robert Latamaosadi <robert.latamaosadi@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
@@ -21,14 +43,20 @@
   "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
-    "./package.json": "./package.json",
-    "./base.css": "./dist/index.css"
+    "./base.css": "./dist/index.css",
+    "./package.json": "./package.json"
   },
-  "publishConfig": {
-    "access": "public"
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
     "build": "tsdown",
@@ -36,12 +64,11 @@
     "play": "vite --config playground/vite.config.ts",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && bun publish --access public",
     "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@clock-ui/styles": "workspace:*",

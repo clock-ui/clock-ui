@@ -2,20 +2,45 @@
   "name": "@clock-ui/dom",
   "version": "0.1.2",
   "description": "Vanilla DOM-based clock components with built-in rendering and styling support.",
+  "keywords": [
+    "clock",
+    "analog-clock",
+    "analog",
+    "time",
+    "timezone",
+    "component",
+    "ui",
+    "css",
+    "typescript",
+    "zero-dependency",
+    "vanilla",
+    "dom",
+    "umd",
+    "svelte",
+    "solid",
+    "angular",
+    "web-components",
+    "custom-elements"
+  ],
   "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com/clock-ui/clock-ui#readme",
+  "homepage": "https://clock-ui.github.io/clock-ui/",
   "bugs": {
     "url": "https://github.com/clock-ui/clock-ui/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clock-ui/clock-ui.git"
+    "url": "git+https://github.com/clock-ui/clock-ui.git",
+    "directory": "packages/dom"
   },
   "author": "Robert Latamaosadi <robert.latamaosadi@gmail.com>",
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": [
+    "**/*.css",
+    "**/element.*"
+  ],
   "files": [
     "dist"
   ],
@@ -23,18 +48,27 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json",
-    "./base.css": "./dist/index.css"
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./element": {
+      "types": "./dist/element.d.mts",
+      "default": "./dist/element.mjs"
+    },
+    "./base.css": "./dist/index.css",
+    "./package.json": "./package.json"
   },
   "unpkg": "./dist/index.umd.js",
   "jsdelivr": "./dist/index.umd.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && bun publish --access public",
     "prepublishOnly": "bun run build"
   },
   "devDependencies": {
