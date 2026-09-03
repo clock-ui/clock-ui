@@ -8,7 +8,10 @@ const props = withDefaults(defineProps<LiveClockProps>(), {
   dualTone: true,
 });
 
-let clock = new ClockWork({ timezone: props.timezone });
+const clock = new ClockWork({
+  timezone: props.timezone,
+  tickDuration: props.tickDuration,
+});
 
 const hours = ref(0);
 const minutes = ref(0);
@@ -33,16 +36,38 @@ onBeforeUnmount(() => {
 });
 
 watch(
-  () => props.timezone,
-  (tz) => {
-    if (tz) {
-      clock = new ClockWork({ timezone: tz });
-    }
+  () => [props.timezone, props.tickDuration],
+  ([tz, tickDuration]) => {
+    // Assign unconditionally: clearing a prop must fall back to the default.
+    clock.setOptions({
+      timezone: tz as string | undefined,
+      tickDuration: tickDuration as number | undefined,
+    });
   }
 );
 
+// A continuously sweeping hand is exactly what prefers-reduced-motion asks us
+// not to do, so fall back to tick mode when the user has opted out.
+const reduceMotion = ref(false);
+
+onMounted(() => {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const apply = () => {
+    reduceMotion.value = query.matches;
+    clock.setOptions({ reducedMotion: query.matches });
+  };
+
+  apply();
+  query.addEventListener("change", apply);
+
+  onBeforeUnmount(() => {
+    query.removeEventListener("change", apply);
+  });
+});
+
 function updateTime() {
-  if (props.smoothSweep) {
+  if (props.smoothSweep && !reduceMotion.value) {
     clock.updateSweep();
   } else {
     clock.updateTick();
