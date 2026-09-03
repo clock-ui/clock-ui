@@ -72,9 +72,6 @@
   filter: drop-shadow(2px 2px 2px transparent);
 }
 
-.clock-ui--rigid .clock-ui__hand--second {
-  transition: rotate 400ms cubic-bezier(0.27, -0.37, 0.32, 1.5);
-}
 
 .clock-ui__hand--hour {
   background-color: var(--cui-hour-hand-color, var(--cui-hand-color, var(--cui-primary-color)));
