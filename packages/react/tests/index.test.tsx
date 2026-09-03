@@ -5,46 +5,15 @@ import { expect, test, vi, beforeEach, describe } from "vitest";
 import { BaseClock } from "../src/BaseClock";
 import { LiveClock } from "../src/LiveClock";
 
-// Mock the utility functions
-vi.mock("@clock-ui/utils", () => ({
-  calculateShadow: vi.fn(() => "drop-shadow(0px 0px 0px rgba(0,0,0,0))"),
-  ClockFace: vi.fn().mockImplementation(function () {
-    return {
-      getAngles: () => ({
-        hour: 90,
-        minute: 180,
-        second: 270,
-      }),
-    };
-  }),
-  getHoursToDisplay: vi.fn(() => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
-  getTicksToDisplay: vi.fn(() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]),
-  romanNumerals: [
-    "I",
-    "II",
-    "III",
-    "IV",
-    "V",
-    "VI",
-    "VII",
-    "VIII",
-    "IX",
-    "X",
-    "XI",
-    "XII",
-  ],
-  ClockWork: vi.fn().mockImplementation(function () {
-    return {
-      getState: () => ({
-        hours: 12,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 0,
-      }),
-      updateSweep: vi.fn(),
-      updateTick: vi.fn(),
-    };
-  }),
+// @clock-ui/utils is exercised for real here — a hand-written mock of it
+// silently drifts from the implementation it is standing in for.
+
+// Mock matchMedia (not implemented in happy-dom)
+global.matchMedia = vi.fn().mockImplementation((query: string) => ({
+  matches: false,
+  media: query,
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
 }));
 
 // Mock ResizeObserver
@@ -196,5 +165,35 @@ describe("LiveClock", () => {
     // The component should render without errors and initialize state
     const clockElement = container.querySelector(".clock-ui");
     expect(clockElement).toBeInTheDocument();
+  });
+});
+
+describe("class and style forwarding", () => {
+  it("merges className onto the root, keeping its own classes", () => {
+    const { container } = render(
+      <BaseClock hours={10} minutes={9} className="dark-clock" />,
+    );
+    const root = container.querySelector(".clock-ui")!;
+
+    // Theming works by putting --cui-* on the root, so a dropped className
+    // silently breaks every themed clock.
+    expect(root).toHaveClass("dark-clock");
+    expect(root).toHaveClass("clock-ui");
+    expect(root).toHaveClass("clock-ui--bordered");
+  });
+
+  it("merges style without clobbering the sizing variable", () => {
+    const { container } = render(
+      <BaseClock hours={10} minutes={9} style={{ opacity: 0.5 }} />,
+    );
+    const root = container.querySelector(".clock-ui") as HTMLElement;
+
+    expect(root.style.opacity).toBe("0.5");
+    expect(root.style.getPropertyValue("--cui-width")).toBe("0");
+  });
+
+  it("forwards className through LiveClock", () => {
+    const { container } = render(<LiveClock className="themed" />);
+    expect(container.querySelector(".clock-ui")).toHaveClass("themed");
   });
 });

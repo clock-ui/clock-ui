@@ -4,7 +4,12 @@ import { ClockWork } from "@clock-ui/utils";
 import { BaseClock } from "./BaseClock";
 
 export const LiveClock: React.FC<LiveClockProps> = (props) => {
-  const clockRef = useRef(new ClockWork({ timezone: props.timezone }));
+  const clockRef = useRef(
+    new ClockWork({
+      timezone: props.timezone,
+      tickDuration: props.tickDuration,
+    }),
+  );
   const frameId = useRef<number | null>(null);
 
   const smoothSweepRef = useRef(props.smoothSweep);
@@ -15,14 +20,33 @@ export const LiveClock: React.FC<LiveClockProps> = (props) => {
   const [minutes, setMinutes] = useState(initial.minutes);
   const [seconds, setSeconds] = useState(initial.seconds);
   const [milliseconds, setMilliseconds] = useState(initial.milliseconds);
-  // const [currentDate, setCurrentDate] = useRef(0);
+  const [currentDate, setCurrentDate] = useState(() =>
+    clockRef.current.getCurrentDate(),
+  );
 
   useEffect(() => {
-    clockRef.current = new ClockWork({ timezone: props.timezone });
-  }, [props.timezone]);
+    clockRef.current.setOptions({
+      timezone: props.timezone,
+      tickDuration: props.tickDuration,
+    });
+  }, [props.timezone, props.tickDuration]);
 
+  // A continuously sweeping hand is exactly what prefers-reduced-motion asks
+  // us not to do, so fall back to tick mode when the user has opted out.
   useEffect(() => {
-    smoothSweepRef.current = props.smoothSweep;
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const apply = () => {
+      smoothSweepRef.current = props.smoothSweep && !query.matches;
+      clockRef.current.setOptions({ reducedMotion: query.matches });
+    };
+
+    apply();
+    query.addEventListener("change", apply);
+
+    return () => {
+      query.removeEventListener("change", apply);
+    };
   }, [props.smoothSweep]);
 
   function updateTime() {
@@ -40,7 +64,7 @@ export const LiveClock: React.FC<LiveClockProps> = (props) => {
     setMinutes(state.minutes);
     setSeconds(state.seconds);
     setMilliseconds(state.milliseconds);
-    // setCurrentDate(clock.getCurrentDate());
+    setCurrentDate(clock.getCurrentDate());
   }
 
   const loop = () => {
@@ -63,6 +87,8 @@ export const LiveClock: React.FC<LiveClockProps> = (props) => {
       minutes={minutes}
       seconds={seconds}
       milliseconds={milliseconds}
-    />
+    >
+      {props.hideDate ? null : currentDate}
+    </BaseClock>
   );
 };
