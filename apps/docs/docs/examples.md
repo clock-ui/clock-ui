@@ -22,18 +22,51 @@ This page showcases practical examples and common patterns for using Clock UI co
   <LiveClock />
 </div>
 
-```vue
-<template>
-  <div>
-    <h1>Current Time</h1>
-    <LiveClock />
-  </div>
-</template>
+::: code-group
 
+```vue [Vue]
 <script setup>
 import { LiveClock } from "@clock-ui/vue";
+import "@clock-ui/vue/base.css";
 </script>
+
+<template>
+  <h1>Current Time</h1>
+  <LiveClock />
+</template>
 ```
+
+```tsx [React]
+import { LiveClock } from "@clock-ui/react";
+import "@clock-ui/react/base.css";
+
+export function Now() {
+  return (
+    <>
+      <h1>Current Time</h1>
+      <LiveClock />
+    </>
+  );
+}
+```
+
+```js [DOM]
+import { LiveClockUI } from "@clock-ui/dom";
+import "@clock-ui/dom/base.css";
+
+new LiveClockUI("#clock", {});
+```
+
+```html [Web Component]
+<script type="module">
+  import "@clock-ui/dom/element";
+  import "@clock-ui/dom/base.css";
+</script>
+
+<clock-ui style="width: 240px"></clock-ui>
+```
+
+:::
 
 ### Static Time Display
 
@@ -41,18 +74,43 @@ import { LiveClock } from "@clock-ui/vue";
   <BaseClock :hours="14" :minutes="30" />
 </div>
 
-```vue
-<template>
-  <div>
-    <h2>Meeting at 2:30 PM</h2>
-    <BaseClock :hours="14" :minutes="30" />
-  </div>
-</template>
+::: code-group
 
+```vue [Vue]
 <script setup>
 import { BaseClock } from "@clock-ui/vue";
 </script>
+
+<template>
+  <h2>Meeting at 2:30 PM</h2>
+  <BaseClock :hours="14" :minutes="30" />
+</template>
 ```
+
+```tsx [React]
+import { BaseClock } from "@clock-ui/react";
+
+export function Meeting() {
+  return (
+    <>
+      <h2>Meeting at 2:30 PM</h2>
+      <BaseClock hours={14} minutes={30} />
+    </>
+  );
+}
+```
+
+```js [DOM]
+import { BaseClockUI } from "@clock-ui/dom";
+
+new BaseClockUI("#meeting", { hours: 14, minutes: 30 });
+```
+
+```html [Web Component]
+<clock-ui hours="14" minutes="30"></clock-ui>
+```
+
+:::
 
 ## Timezone Examples
 
@@ -65,16 +123,9 @@ import { BaseClock } from "@clock-ui/vue";
   </div>
 </div>
 
-```vue
-<template>
-  <div class="world-clock-grid">
-    <div v-for="city in cities" :key="city.timezone" class="city-clock">
-      <h3>{{ city.name }}</h3>
-      <LiveClock :timezone="city.timezone" />
-    </div>
-  </div>
-</template>
+::: code-group
 
+```vue [Vue]
 <script setup>
 import { LiveClock } from "@clock-ui/vue";
 
@@ -86,7 +137,84 @@ const cities = [
 ];
 </script>
 
-<style scoped>
+<template>
+  <div class="world-clock-grid">
+    <div v-for="city in cities" :key="city.timezone" class="city-clock">
+      <h3>{{ city.name }}</h3>
+      <LiveClock :timezone="city.timezone" />
+    </div>
+  </div>
+</template>
+```
+
+```tsx [React]
+import { LiveClock } from "@clock-ui/react";
+
+const cities = [
+  { name: "New York", timezone: "America/New_York" },
+  { name: "London", timezone: "Europe/London" },
+  { name: "Tokyo", timezone: "Asia/Tokyo" },
+  { name: "Sydney", timezone: "Australia/Sydney" },
+];
+
+export function WorldClocks() {
+  return (
+    <div className="world-clock-grid">
+      {cities.map((city) => (
+        <div key={city.timezone} className="city-clock">
+          <h3>{city.name}</h3>
+          <LiveClock timezone={city.timezone} />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+```js [DOM]
+import { LiveClockUI } from "@clock-ui/dom";
+
+const cities = [
+  { name: "New York", timezone: "America/New_York" },
+  { name: "London", timezone: "Europe/London" },
+  { name: "Tokyo", timezone: "Asia/Tokyo" },
+  { name: "Sydney", timezone: "Australia/Sydney" },
+];
+
+const grid = document.querySelector(".world-clock-grid");
+
+for (const city of cities) {
+  const cell = document.createElement("div");
+  cell.className = "city-clock";
+  cell.innerHTML = `<h3>${city.name}</h3><div></div>`;
+  grid.append(cell);
+
+  new LiveClockUI(cell.lastElementChild, { timezone: city.timezone });
+}
+```
+
+```html [Web Component]
+<div class="world-clock-grid">
+  <div class="city-clock">
+    <h3>New York</h3><clock-ui timezone="America/New_York"></clock-ui>
+  </div>
+  <div class="city-clock">
+    <h3>London</h3><clock-ui timezone="Europe/London"></clock-ui>
+  </div>
+  <div class="city-clock">
+    <h3>Tokyo</h3><clock-ui timezone="Asia/Tokyo"></clock-ui>
+  </div>
+  <div class="city-clock">
+    <h3>Sydney</h3><clock-ui timezone="Australia/Sydney"></clock-ui>
+  </div>
+</div>
+```
+
+:::
+
+The grid styling is the same in every case:
+
+```css
 .world-clock-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -102,7 +230,6 @@ const cities = [
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
-</style>
 ```
 
 ### Timezone Converter
@@ -119,7 +246,16 @@ const cities = [
   </div>
 </div>
 
-```vue
+::: code-group
+
+```vue [Vue]
+<script setup>
+import { ref } from "vue";
+import { LiveClock } from "@clock-ui/vue";
+
+const selectedTimezone = ref("America/New_York");
+</script>
+
 <template>
   <div class="timezone-converter">
     <select v-model="selectedTimezone">
@@ -131,15 +267,50 @@ const cities = [
     <LiveClock :timezone="selectedTimezone" />
   </div>
 </template>
+```
 
-<script setup>
-import { ref } from "vue";
-import { LiveClock } from "@clock-ui/vue";
+```tsx [React]
+import { useState } from "react";
+import { LiveClock } from "@clock-ui/react";
 
-const selectedTimezone = ref("America/New_York");
-</script>
+const ZONES = [
+  { label: "Eastern Time", value: "America/New_York" },
+  { label: "Central Time", value: "America/Chicago" },
+  { label: "Mountain Time", value: "America/Denver" },
+  { label: "Pacific Time", value: "America/Los_Angeles" },
+];
 
-<style scoped>
+export function TimezoneConverter() {
+  const [timezone, setTimezone] = useState(ZONES[0].value);
+
+  return (
+    <div className="timezone-converter">
+      <select value={timezone} onChange={(e) => setTimezone(e.target.value)}>
+        {ZONES.map((zone) => (
+          <option key={zone.value} value={zone.value}>
+            {zone.label}
+          </option>
+        ))}
+      </select>
+      <LiveClock timezone={timezone} />
+    </div>
+  );
+}
+```
+
+```js [DOM]
+import { LiveClockUI } from "@clock-ui/dom";
+
+const clock = new LiveClockUI("#clock", { timezone: "America/New_York" });
+
+document.querySelector("#zone").addEventListener("change", (event) => {
+  clock.setTimezone(event.target.value);
+});
+```
+
+:::
+
+```css
 .timezone-converter {
   display: flex;
   flex-direction: column;
@@ -153,10 +324,33 @@ select {
   border-radius: 4px;
   border: 1px solid #ddd;
 }
-</style>
 ```
 
 ## Styling Examples
+
+Everything below is done with CSS custom properties, so the recipes are
+identical in every framework — only the markup that applies the class differs:
+
+::: code-group
+
+```vue [Vue]
+<LiveClock class="dark-clock" />
+```
+
+```tsx [React]
+<LiveClock className="dark-clock" />
+```
+
+```js [DOM]
+new LiveClockUI("#clock", {}); // then: el.classList.add("dark-clock")
+```
+
+```html [Web Component]
+<clock-ui class="dark-clock"></clock-ui>
+```
+
+:::
+
 
 ### Custom Themed Clock
 
@@ -166,18 +360,7 @@ select {
   </div>
 </div>
 
-```vue
-<template>
-  <div class="dark-clock-wrapper">
-    <LiveClock class="dark-clock" />
-  </div>
-</template>
-
-<script setup>
-import { LiveClock } from "@clock-ui/vue";
-</script>
-
-<style scoped>
+```css
 .dark-clock {
   --cui-bg-color: #1a1a1a;
   --cui-primary-color: #ffffff;
@@ -191,7 +374,6 @@ import { LiveClock } from "@clock-ui/vue";
   border-radius: 8px;
   margin: 2rem 0;
 }
-</style>
 ```
 
 ### Minimalist Clock
@@ -208,23 +390,32 @@ import { LiveClock } from "@clock-ui/vue";
   </div>
 </div>
 
-```vue
-<template>
-  <div class="minimalist-container">
-    <LiveClock
-      :hide-ticks="true"
-      :hide-numbers="true"
-      :no-border="true"
-      class="minimal-clock"
-    />
-  </div>
-</template>
+::: code-group
 
-<script setup>
-import { LiveClock } from "@clock-ui/vue";
-</script>
+```vue [Vue]
+<LiveClock hide-ticks hide-numbers no-border hide-date class="minimal-clock" />
+```
 
-<style scoped>
+```tsx [React]
+<LiveClock hideTicks hideNumbers noBorder hideDate className="minimal-clock" />
+```
+
+```js [DOM]
+new LiveClockUI("#clock", {
+  hideTicks: true,
+  hideNumbers: true,
+  noBorder: true,
+  hideDate: true,
+});
+```
+
+```html [Web Component]
+<clock-ui hide-ticks hide-numbers no-border hide-date class="minimal-clock"></clock-ui>
+```
+
+:::
+
+```css
 .minimal-clock {
   --cui-bg-color: transparent;
   --cui-primary-color: #333333;
@@ -237,7 +428,6 @@ import { LiveClock } from "@clock-ui/vue";
   border-radius: 8px;
   margin: 2rem 0;
 }
-</style>
 ```
 
 ### Vintage Clock
@@ -248,18 +438,30 @@ import { LiveClock } from "@clock-ui/vue";
   </div>
 </div>
 
-```vue
-<template>
-  <div class="vintage-container">
-    <LiveClock :use-roman="true" class="vintage-clock" />
-  </div>
-</template>
+::: code-group
 
-<script setup>
-import { LiveClock } from "@clock-ui/vue";
-</script>
+```vue [Vue]
+<LiveClock use-roman class="vintage-clock" />
+```
 
-<style scoped>
+```tsx [React]
+<LiveClock useRoman className="vintage-clock" />
+```
+
+```js [DOM]
+new LiveClockUI("#clock", { useRoman: true });
+```
+
+```html [Web Component]
+<clock-ui use-roman class="vintage-clock"></clock-ui>
+```
+
+:::
+
+Roman numerals are oriented radially, so the lower ones read upside down —
+the traditional tower-clock style.
+
+```css
 .vintage-clock {
   --cui-font-family: "Times New Roman", serif;
   --cui-font-family-roman: "Times New Roman", serif;
@@ -276,52 +478,128 @@ import { LiveClock } from "@clock-ui/vue";
   margin: 2rem 0;
   border: 4px solid #8b4513;
 }
-</style>
 ```
 
 ## Advanced Examples
 
 ### Clock with Info Display
 
-```vue
+The small window on the face takes arbitrary content — a date, a weekday, a
+label. In Vue it is the `info` slot; in React it is `children`; in the DOM
+package it is the `info` option.
+
+::: code-group
+
+```vue [Vue]
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+import { LiveClock } from "@clock-ui/vue";
+
+const currentDate = ref(new Date().toLocaleDateString());
+let timer = null;
+
+onMounted(() => {
+  timer = setInterval(() => {
+    currentDate.value = new Date().toLocaleDateString();
+  }, 60_000);
+});
+
+onUnmounted(() => clearInterval(timer));
+</script>
+
 <template>
-  <LiveClock>
+  <LiveClock hide-date>
     <template #info>
-      <div class="date-display">
-        {{ currentDate }}
-      </div>
+      <div class="date-display">{{ currentDate }}</div>
     </template>
   </LiveClock>
 </template>
+```
 
-<script setup>
-import { LiveClock } from "@clock-ui/vue";
-import { ref, onMounted } from "vue";
+```tsx [React]
+import { useEffect, useState } from "react";
+import { LiveClock } from "@clock-ui/react";
 
-const currentDate = ref("");
+export function ClockWithDate() {
+  const [date, setDate] = useState(() => new Date().toLocaleDateString());
 
-onMounted(() => {
-  updateDate();
-  setInterval(updateDate, 60000); // Update every minute
+  useEffect(() => {
+    const timer = setInterval(
+      () => setDate(new Date().toLocaleDateString()),
+      60_000,
+    );
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <LiveClock hideDate>
+      <div className="date-display">{date}</div>
+    </LiveClock>
+  );
+}
+```
+
+```js [DOM]
+import { BaseClockUI } from "@clock-ui/dom";
+
+const clock = new BaseClockUI("#clock", {
+  hours: 10,
+  minutes: 9,
+  info: new Date().toLocaleDateString(),
 });
 
-function updateDate() {
-  currentDate.value = new Date().toLocaleDateString();
-}
-</script>
+// Refresh the window whenever the value changes.
+clock.update({ info: new Date().toLocaleDateString() });
+```
 
-<style scoped>
+:::
+
+`hideDate` turns off the built-in day-of-month so it does not compete with your
+own content.
+
+```css
 .date-display {
   font-size: 0.8rem;
   opacity: 0.8;
   text-align: center;
 }
-</style>
 ```
 
 ### Countdown Timer
 
-```vue
+Derive the remaining time from a fixed deadline rather than decrementing a
+counter on an interval — `setInterval` drifts, and the error accumulates for as
+long as the countdown runs.
+
+::: code-group
+
+```vue [Vue]
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+import { BaseClock } from "@clock-ui/vue";
+
+const deadline = Date.now() + 5 * 60 * 1000;
+const timeLeft = ref(5 * 60);
+let frame = null;
+
+const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+  return `${mins}:${String(seconds % 60).padStart(2, "0")}`;
+};
+
+onMounted(() => {
+  const tick = () => {
+    timeLeft.value = Math.max(0, Math.round((deadline - Date.now()) / 1000));
+    frame = requestAnimationFrame(tick);
+  };
+  tick();
+});
+
+onUnmounted(() => {
+  if (frame) cancelAnimationFrame(frame);
+});
+</script>
+
 <template>
   <div class="countdown-container">
     <h3>Time Remaining: {{ formatTime(timeLeft) }}</h3>
@@ -332,34 +610,68 @@ function updateDate() {
     />
   </div>
 </template>
+```
 
-<script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import { BaseClock } from "@clock-ui/vue";
+```tsx [React]
+import { useEffect, useRef, useState } from "react";
+import { BaseClock } from "@clock-ui/react";
 
-const timeLeft = ref(300); // 5 minutes in seconds
-let timer = null;
+const formatTime = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
-const formatTime = (seconds) => {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
+export function Countdown({ minutes = 5 }) {
+  const deadline = useRef(Date.now() + minutes * 60 * 1000);
+  const [timeLeft, setTimeLeft] = useState(minutes * 60);
 
-onMounted(() => {
-  timer = setInterval(() => {
-    if (timeLeft.value > 0) {
-      timeLeft.value--;
-    }
-  }, 1000);
-});
+  useEffect(() => {
+    let frame: number;
+    const tick = () => {
+      setTimeLeft(Math.max(0, Math.round((deadline.current - Date.now()) / 1000)));
+      frame = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
-onUnmounted(() => {
-  if (timer) clearInterval(timer);
-});
-</script>
+  return (
+    <div className="countdown-container">
+      <h3>Time Remaining: {formatTime(timeLeft)}</h3>
+      <BaseClock
+        hours={Math.floor(timeLeft / 3600)}
+        minutes={Math.floor((timeLeft % 3600) / 60)}
+        seconds={timeLeft % 60}
+      />
+    </div>
+  );
+}
+```
 
-<style scoped>
+```js [DOM]
+import { BaseClockUI } from "@clock-ui/dom";
+
+const deadline = Date.now() + 5 * 60 * 1000;
+const clock = new BaseClockUI("#countdown", { hours: 0, minutes: 5 });
+const label = document.querySelector("#countdown-label");
+
+(function tick() {
+  const left = Math.max(0, Math.round((deadline - Date.now()) / 1000));
+
+  label.textContent =
+    `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
+
+  clock.update({
+    hours: Math.floor(left / 3600),
+    minutes: Math.floor((left % 3600) / 60),
+    seconds: left % 60,
+  });
+
+  requestAnimationFrame(tick);
+})();
+```
+
+:::
+
+```css
 .countdown-container {
   text-align: center;
   background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
@@ -372,42 +684,86 @@ onUnmounted(() => {
   margin-bottom: 1rem;
   color: #333;
 }
-</style>
 ```
 
 ### Analog + Digital Clock Combo
 
-```vue
-<template>
-  <div class="combo-clock">
-    <LiveClock />
-    <div class="digital-time">{{ currentTime }}</div>
-  </div>
-</template>
+Read the clock once per frame from a single `Date` so the two readings can
+never disagree.
 
+::: code-group
+
+```vue [Vue]
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { LiveClock } from "@clock-ui/vue";
 
-const currentTime = ref("");
-
-let timer = null;
+const currentTime = ref(new Date().toLocaleTimeString());
+let frame = null;
 
 onMounted(() => {
-  updateTime();
-  timer = setInterval(updateTime, 1000);
+  const tick = () => {
+    currentTime.value = new Date().toLocaleTimeString();
+    frame = requestAnimationFrame(tick);
+  };
+  tick();
 });
 
 onUnmounted(() => {
-  if (timer) clearInterval(timer);
+  if (frame) cancelAnimationFrame(frame);
 });
-
-function updateTime() {
-  currentTime.value = new Date().toLocaleTimeString();
-}
 </script>
 
-<style scoped>
+<template>
+  <div class="combo-clock">
+    <LiveClock smooth-sweep />
+    <div class="digital-time">{{ currentTime }}</div>
+  </div>
+</template>
+```
+
+```tsx [React]
+import { useEffect, useState } from "react";
+import { LiveClock } from "@clock-ui/react";
+
+export function ComboClock() {
+  const [time, setTime] = useState(() => new Date().toLocaleTimeString());
+
+  useEffect(() => {
+    let frame: number;
+    const tick = () => {
+      setTime(new Date().toLocaleTimeString());
+      frame = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <div className="combo-clock">
+      <LiveClock smoothSweep />
+      <div className="digital-time">{time}</div>
+    </div>
+  );
+}
+```
+
+```js [DOM]
+import { LiveClockUI } from "@clock-ui/dom";
+
+new LiveClockUI("#clock", { smoothSweep: true });
+
+const digital = document.querySelector(".digital-time");
+
+(function tick() {
+  digital.textContent = new Date().toLocaleTimeString();
+  requestAnimationFrame(tick);
+})();
+```
+
+:::
+
+```css
 .combo-clock {
   display: flex;
   flex-direction: column;
@@ -425,5 +781,4 @@ function updateTime() {
   color: white;
   font-family: "Courier New", monospace;
 }
-</style>
 ```

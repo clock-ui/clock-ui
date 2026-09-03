@@ -1,6 +1,21 @@
+<div align="center">
+
 # @clock-ui/vue
 
-Vue components for Clock UI, providing reactive clock widgets built with Vue 3 and Composition API.
+**Accurate, customizable analog clocks for Vue 3.5+.**
+
+[![npm](https://img.shields.io/npm/v/@clock-ui/vue?color=42b883)](https://www.npmjs.com/package/@clock-ui/vue)
+[![npm downloads](https://img.shields.io/npm/dm/@clock-ui/vue?color=blue)](https://www.npmjs.com/package/@clock-ui/vue)
+[![gzip size](https://img.shields.io/bundlejs/size/@clock-ui/vue?label=gzip)](https://bundlejs.com/?q=%40clock-ui%2Fvue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+<img src="https://clock-ui.github.io/clock-ui/clock.gif" alt="Two Clock UI clocks running side by side, one sweeping smoothly and one ticking" width="640">
+
+[**Playground**](https://clock-ui.github.io/clock-ui/docs/playground) ·
+[**Documentation**](https://clock-ui.github.io/clock-ui/docs/vue) ·
+[**Examples**](https://clock-ui.github.io/clock-ui/docs/examples)
+
+</div>
 
 ## Installation
 
@@ -31,7 +46,7 @@ A real-time clock component that displays the current time.
 
 <script setup>
 import { LiveClock } from "@clock-ui/vue";
-import "@clock-ui/dom/base.css";
+import "@clock-ui/vue/base.css";
 </script>
 ```
 
@@ -46,7 +61,7 @@ A static clock component that displays a specific time.
 
 <script setup>
 import { BaseClock } from "@clock-ui/vue";
-import "@clock-ui/dom/base.css";
+import "@clock-ui/vue/base.css";
 </script>
 ```
 
