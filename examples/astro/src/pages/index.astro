@@ -1,0 +1,82 @@
+---
+// Astro ships zero client JavaScript by default, so the custom element is
+// imported from a client-side script tag below rather than from frontmatter.
+import "@clock-ui/dom/base.css";
+import "../styles.css";
+
+const zones = [
+  { label: "New York", value: "America/New_York" },
+  { label: "London", value: "Europe/London" },
+  { label: "Tokyo", value: "Asia/Tokyo" },
+  { label: "Sydney", value: "Australia/Sydney" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock UI — Astro example</title>
+  </head>
+  <body>
+    <h1>Clock UI — Astro</h1>
+    <p class="lede">
+      Astro has no wrapper package. This is the <code>&lt;clock-ui&gt;</code>
+      custom element from <code>@clock-ui/dom</code>. The element is registered
+      from a client script; the markup itself is static HTML.
+    </p>
+
+    <div class="grid">
+      <figure>
+        <clock-ui class="clock" smooth-sweep></clock-ui>
+        <figcaption>Live · smooth sweep</figcaption>
+      </figure>
+
+      <figure>
+        <clock-ui class="clock"></clock-ui>
+        <figcaption>Live · ticking</figcaption>
+      </figure>
+
+      <figure>
+        <clock-ui class="clock" tick-duration="150"></clock-ui>
+        <figcaption>Tick · 150ms swing</figcaption>
+      </figure>
+
+      <figure>
+        <clock-ui class="clock" hours="10" minutes="9" seconds="36"></clock-ui>
+        <figcaption>Static · 10:09</figcaption>
+      </figure>
+
+      <figure>
+        <clock-ui class="clock theme-midnight" smooth-sweep></clock-ui>
+        <figcaption>Themed · midnight</figcaption>
+      </figure>
+
+      <figure>
+        <clock-ui class="clock theme-vintage" use-roman></clock-ui>
+        <figcaption>Themed · vintage</figcaption>
+      </figure>
+
+      <figure>
+        <clock-ui class="clock" hide-ticks hide-numbers no-border hide-date>
+        </clock-ui>
+        <figcaption>Minimal</figcaption>
+      </figure>
+
+      {
+        zones.map((zone) => (
+          <figure>
+            <clock-ui class="clock" timezone={zone.value} />
+            <figcaption>{zone.label}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <script>
+      // Registers <clock-ui> in the browser.
+      import "@clock-ui/dom/element";
+    </script>
+  </body>
+</html>
