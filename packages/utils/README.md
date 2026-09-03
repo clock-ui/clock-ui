@@ -1,23 +1,11 @@
-# tsdown-starter
+# @clock-ui/utils
 
-A starter for creating a TypeScript package.
+Internal shared logic for [Clock UI](https://github.com/clock-ui/clock-ui): time
+reading, hand-angle math, tick easing, and shadow calculation.
 
-## Development
+**This package is private and is not published to npm.** It is bundled into
+`@clock-ui/dom`, `@clock-ui/react`, and `@clock-ui/vue` at build time, which is
+why those packages have no runtime dependencies.
 
-- Install dependencies:
-
-```bash
-npm install
-```
-
-- Run the unit tests:
-
-```bash
-npm run test
-```
-
-- Build the library:
-
-```bash
-npm run build
-```
+If you want to drive the hands yourself, use `BaseClock` / `BaseClockUI` from
+one of the published packages instead.
