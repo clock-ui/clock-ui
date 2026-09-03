@@ -1,9 +1,21 @@
+<div align="center">
+
 # @clock-ui/react
 
-[![npm version](https://badge.fury.io/js/%40clock-ui%2Freact.svg)](https://badge.fury.io/js/%40clock-ui%2Freact)
+**Accurate, customizable analog clocks for React 18 & 19.**
+
+[![npm](https://img.shields.io/npm/v/@clock-ui/react?color=cb3837)](https://www.npmjs.com/package/@clock-ui/react)
+[![npm downloads](https://img.shields.io/npm/dm/@clock-ui/react?color=blue)](https://www.npmjs.com/package/@clock-ui/react)
+[![gzip size](https://img.shields.io/bundlejs/size/@clock-ui/react?label=gzip)](https://bundlejs.com/?q=%40clock-ui%2Freact)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-React components for Clock UI, providing live and static clock widgets built with React and hooks for reactive time updates.
+<img src="https://clock-ui.github.io/clock-ui/clock.gif" alt="Two Clock UI clocks running side by side, one sweeping smoothly and one ticking" width="640">
+
+[**Playground**](https://clock-ui.github.io/clock-ui/docs/playground) ·
+[**Documentation**](https://clock-ui.github.io/clock-ui/docs/react) ·
+[**Examples**](https://clock-ui.github.io/clock-ui/docs/examples)
+
+</div>
 
 ## Installation
 
@@ -29,6 +41,7 @@ A live clock component that updates in real-time.
 
 ```tsx
 import { LiveClock } from "@clock-ui/react";
+import "@clock-ui/react/base.css";
 
 function App() {
   return (
@@ -45,6 +58,7 @@ A static clock component for displaying specific times.
 
 ```tsx
 import { BaseClock } from "@clock-ui/react";
+import "@clock-ui/react/base.css";
 
 function App() {
   return (

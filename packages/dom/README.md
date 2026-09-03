@@ -1,6 +1,21 @@
+<div align="center">
+
 # @clock-ui/dom
 
-Vanilla DOM-based clock components with built-in rendering and styling support.
+**Accurate, customizable analog clocks for Vanilla JS.**
+
+[![npm](https://img.shields.io/npm/v/@clock-ui/dom?color=f7df1e)](https://www.npmjs.com/package/@clock-ui/dom)
+[![npm downloads](https://img.shields.io/npm/dm/@clock-ui/dom?color=blue)](https://www.npmjs.com/package/@clock-ui/dom)
+[![gzip size](https://img.shields.io/bundlejs/size/@clock-ui/dom?label=gzip)](https://bundlejs.com/?q=%40clock-ui%2Fdom)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+<img src="https://clock-ui.github.io/clock-ui/clock.gif" alt="Two Clock UI clocks running side by side, one sweeping smoothly and one ticking" width="640">
+
+[**Playground**](https://clock-ui.github.io/clock-ui/docs/playground) ·
+[**Documentation**](https://clock-ui.github.io/clock-ui/docs/dom) ·
+[**Examples**](https://clock-ui.github.io/clock-ui/docs/examples)
+
+</div>
 
 ## Installation
 
@@ -65,9 +80,9 @@ Include the CSS and JavaScript from a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@clock-ui/dom@0.1.1/dist/index.css"
+  href="https://unpkg.com/@clock-ui/dom@0.1/dist/index.css"
 />
-<script src="https://unpkg.com/@clock-ui/dom@0.1.1/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@clock-ui/dom@0.1/dist/index.umd.js"></script>
 ```
 
 ### Live Clock

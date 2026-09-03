@@ -224,3 +224,17 @@ Extends CommonClockOptions with:
 - `stop()`: Stop animation
 - `setTimezone(tz)`: Change timezone
 - `destroy()`: Clean up
+
+## Tick duration
+
+`LiveClockUI` eases the second hand to each new mark over 600ms by default,
+with a slight overshoot. Pass `tickDuration` to change how long that swing
+takes — a real quartz movement lands in roughly 50-150ms.
+
+```js
+new LiveClockUI("#clock", { tickDuration: 150 }); // crisper
+new LiveClockUI("#clock", { tickDuration: 0 });   // no swing at all
+```
+
+The hand settles on the exact second either way; this only changes how long it
+takes to get there. Sweep mode ignores it, since it moves continuously.
