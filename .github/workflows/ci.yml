@@ -1,31 +1,53 @@
 name: CI
 
 on:
+  push:
+    branches: [main, development]
   pull_request:
-    branches:
-      - development
+    branches: [main, development]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint-and-test:
+  verify:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.0"
 
       - name: Install dependencies
-        run: bun install
+        run: bun install --frozen-lockfile
 
-      - name: Run lint
-        run: bun run lint
+      - name: Typecheck
+        run: bun run typecheck
 
-      - name: Run tests
+      - name: Test
         run: bun run test
+
+      - name: Build
+        run: bun run build
+
+      # Catches broken export maps and mis-pointed type declarations, which is
+      # how the published packages previously shipped a CJS .d.cts as the only
+      # type entry.
+      - name: Lint package manifests
+        run: |
+          for pkg in dom react vue; do
+            (cd "packages/$pkg" && bunx publint --strict)
+          done
+
+      # Loads a real production bundle into a DOM and asserts clocks appear.
+      # Unit tests import from src and dev servers do not tree-shake, so
+      # neither catches a package that builds cleanly but renders nothing once
+      # a consumer bundles it — which is how a stale sideEffects field once
+      # deleted the custom element from every production build.
+      - name: Smoke test the built example
+        run: bun run smoke
