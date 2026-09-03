@@ -37,4 +37,11 @@ export interface LiveClockProps extends CommonClockProps {
   timezone?: string;
   /** Whether to hide the date display */
   hideDate?: boolean;
+
+  /**
+   * How long the second hand takes to swing to each new mark, in
+   * milliseconds. Defaults to 600. `0` snaps with no swing. Ignored in
+   * sweep mode, which moves continuously.
+   */
+  tickDuration?: number;
 }

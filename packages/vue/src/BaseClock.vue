@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import type { BaseClockProps } from "./types/clock";
-import { reactive, ref, onMounted, onUnmounted, watchEffect } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import {
   calculateShadow,
   ClockFace,
+  formatClockLabel,
   getHoursToDisplay,
   getTicksToDisplay,
   romanNumerals,
@@ -48,30 +49,18 @@ onMounted(() => {
   });
 });
 
-const hourAngle = ref(0);
-const minuteAngle = ref(0);
-const secondAngle = ref(0);
-const clockHandShadow = reactive({
-  hour: "",
-  minute: "",
-  second: "",
-});
+// Angles and shadows are pure functions of the props plus the measured width.
+const angles = computed(() =>
+  new ClockFace({ hours, minutes, seconds, milliseconds }).getAngles(),
+);
 
-watchEffect(() => {
-  const clockFace = new ClockFace({ hours, minutes, seconds, milliseconds });
+const clockHandShadow = computed(() => ({
+  hour: calculateShadow(angles.value.hour, width.value),
+  minute: calculateShadow(angles.value.minute, width.value),
+  second: calculateShadow(angles.value.second, width.value, 8),
+}));
 
-  const angles = clockFace.getAngles();
-
-  // Calculate angles for each hand
-  hourAngle.value = angles.hour;
-  minuteAngle.value = angles.minute;
-  secondAngle.value = angles.second;
-
-  // Update shadows for each hand
-  clockHandShadow.hour = calculateShadow(hourAngle.value, width.value);
-  clockHandShadow.minute = calculateShadow(minuteAngle.value, width.value);
-  clockHandShadow.second = calculateShadow(secondAngle.value, width.value, 8);
-});
+const label = computed(() => formatClockLabel(hours, minutes));
 </script>
 
 <template>
@@ -85,8 +74,10 @@ watchEffect(() => {
       },
     ]"
     :style="{ '--cui-width': width }"
+    role="img"
+    :aria-label="label"
   >
-    <div ref="clockEl" class="clock-ui__face">
+    <div ref="clockEl" class="clock-ui__face" aria-hidden="true">
       <template v-if="!hideTicks">
         <div
           v-for="tickIndex in getTicksToDisplay({
@@ -120,18 +111,18 @@ watchEffect(() => {
 
       <div
         class="clock-ui__hand--hour clock-ui__hand"
-        :style="{ '--angle': hourAngle, filter: clockHandShadow.hour }"
+        :style="{ '--angle': angles.hour, filter: clockHandShadow.hour }"
       ></div>
 
       <div
         class="clock-ui__hand--minute clock-ui__hand"
-        :style="{ '--angle': minuteAngle, filter: clockHandShadow.minute }"
+        :style="{ '--angle': angles.minute, filter: clockHandShadow.minute }"
       ></div>
 
       <div
         v-if="!hideSeconds"
         class="clock-ui__hand--second clock-ui__hand"
-        :style="{ '--angle': secondAngle, filter: clockHandShadow.second }"
+        :style="{ '--angle': angles.second, filter: clockHandShadow.second }"
       ></div>
 
       <div class="clock-ui__center"></div>
