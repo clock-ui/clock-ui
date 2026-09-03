@@ -2,5 +2,13 @@
   "name": "@clock-ui/styles",
   "version": "0.1.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "description": "Internal shared stylesheet for Clock UI. Bundled into the published packages.",
+  "license": "MIT",
+  "author": "Robert Latamaosadi <robert.latamaosadi@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clock-ui/clock-ui.git",
+    "directory": "packages/styles"
+  }
 }
