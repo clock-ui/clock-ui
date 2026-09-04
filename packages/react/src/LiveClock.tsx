@@ -14,15 +14,15 @@ export const LiveClock: React.FC<LiveClockProps> = (props) => {
 
   const smoothSweepRef = useRef(props.smoothSweep);
 
-  const initial = clockRef.current.getState();
-
-  const [hours, setHours] = useState(initial.hours);
-  const [minutes, setMinutes] = useState(initial.minutes);
-  const [seconds, setSeconds] = useState(initial.seconds);
-  const [milliseconds, setMilliseconds] = useState(initial.milliseconds);
-  const [currentDate, setCurrentDate] = useState(() =>
-    clockRef.current.getCurrentDate(),
-  );
+  // Seeding from the current time would make the server and the client render
+  // different hand angles, which React reports as a hydration mismatch. Start
+  // from a fixed position instead and fill in the real time on mount — the
+  // same thing the Vue package does.
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [milliseconds, setMilliseconds] = useState(0);
+  const [currentDate, setCurrentDate] = useState(0);
 
   useEffect(() => {
     clockRef.current.setOptions({
