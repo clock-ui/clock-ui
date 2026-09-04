@@ -76,6 +76,7 @@ export default defineConfig({
             { text: "Getting Started", link: "/docs/getting-started" },
             { text: "Playground", link: "/docs/playground" },
             { text: "Accessibility", link: "/docs/accessibility" },
+            { text: "Server-side rendering", link: "/docs/ssr" },
           ],
         },
         {
