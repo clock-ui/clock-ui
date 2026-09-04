@@ -1,22 +1,35 @@
+/*
+ * Per-element overrides.
+ *
+ * Each of these is optional: when unset, the element falls back through a
+ * chain to one of the four base colours below. Registering them makes them
+ * discoverable — they appear in devtools and in editor autocomplete instead
+ * of being invisible until you read the stylesheet.
+ *
+ * The syntax must stay universal. A typed syntax such as "<color>" requires
+ * an initial-value, and an initial value is never "guaranteed-invalid", so
+ * `var(--cui-frame-color, var(--cui-bg-color))` would resolve to the initial
+ * value and every fallback chain in this file would stop working.
+ */
+@property --cui-face-color { syntax: "*"; inherits: true; }
+@property --cui-frame-color { syntax: "*"; inherits: true; }
+@property --cui-tick-color { syntax: "*"; inherits: true; }
+@property --cui-number-color { syntax: "*"; inherits: true; }
+@property --cui-info-color { syntax: "*"; inherits: true; }
+
+@property --cui-hand-color { syntax: "*"; inherits: true; }
+@property --cui-hand-accent-color { syntax: "*"; inherits: true; }
+
+@property --cui-hour-hand-color { syntax: "*"; inherits: true; }
+@property --cui-hour-hand-accent-color { syntax: "*"; inherits: true; }
+@property --cui-minute-hand-color { syntax: "*"; inherits: true; }
+@property --cui-minute-hand-accent-color { syntax: "*"; inherits: true; }
+@property --cui-second-hand-color { syntax: "*"; inherits: true; }
+@property --cui-pin-color { syntax: "*"; inherits: true; }
+
 :root {
   --cui-font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --cui-font-family-roman: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-
-  /* --cui-face-color: #E8EBE4;
-  --cui-frame-color: #13293D;
-  --cui-tick-color: #13293D;
-  --cui-number-color: #13293D;
-  --cui-info-color: #13293D;
-
-  --cui-hand-color: #13293D;
-  --cui-hand-accent-color: #E8EBE4;
-
-  --cui-hour-hand-color: #13293D;
-  --cui-hour-hand-accent-color: #E8EBE4;
-  --cui-minute-hand-color: #13293D;
-  --cui-minute-hand-accent-color: #E8EBE4;
-  --cui-second-hand-color: #F55D3E;
-  --cui-pin-color: #13293D; */
 
   --cui-bg-color: #E8EBE4;
   --cui-primary-color: #13293D;
