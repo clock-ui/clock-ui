@@ -458,8 +458,9 @@ new LiveClockUI("#clock", { useRoman: true });
 
 :::
 
-Roman numerals are oriented radially, so the lower ones read upside down —
-the traditional tower-clock style.
+Roman numerals are oriented radially, pointing outward from the centre, so
+the lower ones read upside down. That is deliberate — it is how roman dials
+have always been set.
 
 ```css
 .vintage-clock {

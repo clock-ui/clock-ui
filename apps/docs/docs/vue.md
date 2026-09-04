@@ -63,7 +63,7 @@ Both components accept these:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `useRoman` | `boolean` | `false` | Roman numerals instead of Arabic. Note that these are oriented radially, so the lower numerals read upside down — the traditional tower-clock style. |
+| `useRoman` | `boolean` | `false` | Roman numerals instead of Arabic. These are oriented radially, pointing outward from the centre, so the lower numerals read upside down. That is deliberate — it is how roman dials have always been set — and it is why Arabic numerals stay upright while these do not. |
 | `cardinalOnly` | `boolean` | `false` | Show only 12, 3, 6, and 9. |
 | `hideNumbers` | `boolean` | `false` | Hide all numerals. |
 | `hideTicks` | `boolean` | `false` | Hide all tick marks. |
