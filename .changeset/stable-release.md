@@ -54,6 +54,15 @@ Fix clock accuracy, widen framework support, and add accessibility.
 
 **Fixes**
 
+- `LiveClock` now renders a fixed 12:00:00 on the server and fills in the real
+  time on mount. The React package seeded its state from the current time, so
+  the server and the client disagreed about every hand angle and React reported
+  a hydration mismatch. Vue already behaved this way; the two now match.
+- The 13 per-element colour overrides are registered with `@property`, so they
+  appear in devtools and editor autocomplete instead of being invisible until
+  you read the stylesheet. The syntax is universal on purpose — a typed syntax
+  requires an initial value, and that would defeat every fallback chain.
+
 - `@clock-ui/react` now forwards `className` and `style` to the clock's root
   element. Both were silently dropped, so every documented theming recipe
   (`className="dark-clock"`) was a no-op. Vue was unaffected — it falls
