@@ -69,3 +69,31 @@ cd packages/react && bun run play
 
 Include the package and version, the framework version, and ideally a small
 reproduction. A screenshot helps a lot for anything visual.
+
+## Releasing
+
+Releases are driven by changesets and run in CI. Nothing is versioned,
+tagged or published by hand.
+
+1. Land your change with a changeset (`bun run changeset`).
+2. On push to `main`, the Release workflow opens a **chore(release): version
+   packages** pull request containing the version bumps and changelog entries.
+3. Merging that pull request publishes to npm.
+
+Two things are deliberate about this setup:
+
+- **Versioning happens in CI, not locally.** `@changesets/changelog-github`
+  needs a `GITHUB_TOKEN` to resolve pull request and author links, and fails
+  outright without one. Running it in the workflow means nobody needs a
+  personal token to cut a release. If you do want to preview the result
+  locally, `GITHUB_TOKEN=$(gh auth token) bun run version:packages` works —
+  just do not commit the result.
+- **The three published packages share one version.** `fixed` in
+  `.changeset/config.json` keeps `@clock-ui/dom`, `@clock-ui/react` and
+  `@clock-ui/vue` in lockstep, so a library sold as one API across three
+  frameworks does not ship as three drifting version numbers. The private
+  `utils` and `styles` packages are unaffected, and the example apps are
+  excluded through `ignore` so they do not collect pointless bumps.
+
+The workflow needs one secret: `NPM_TOKEN`, an npm **automation** token.
+A granular token with 2FA enabled will fail in CI.

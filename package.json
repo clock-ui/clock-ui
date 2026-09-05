@@ -10,14 +10,15 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "typecheck": "turbo run typecheck",
     "changeset": "changeset",
-    "release": "changeset publish",
+    "release": "turbo run build --filter=./packages/* && changeset publish",
     "example:react": "turbo run dev --filter=@clock-ui/example-react",
     "example:vue": "turbo run dev --filter=@clock-ui/example-vue",
     "example:vanilla": "turbo run dev --filter=@clock-ui/example-vanilla",
     "example:svelte": "turbo run dev --filter=@clock-ui/example-svelte",
     "example:solid": "turbo run dev --filter=@clock-ui/example-solid",
     "example:astro": "turbo run dev --filter=@clock-ui/example-astro",
-    "smoke": "bun run --cwd examples/vanilla build && node scripts/smoke-examples.mjs"
+    "smoke": "bun run --cwd examples/vanilla build && node scripts/smoke-examples.mjs",
+    "version:packages": "changeset version"
   },
   "engines": {
     "node": ">=18"
@@ -29,6 +30,7 @@
     "examples/*"
   ],
   "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^2.29.7",
     "@types/node": "^24.10.0",
     "bumpp": "^10.3.1",
