@@ -65,7 +65,7 @@ jobs:
       # publishing. Provenance is generated automatically under OIDC, so
       # NPM_CONFIG_PROVENANCE is unnecessary too.
       - name: Version or publish
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           version: bun run version:packages
           publish: bun run release
