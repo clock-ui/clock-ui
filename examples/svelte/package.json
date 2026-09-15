@@ -13,7 +13,7 @@
     "svelte": "^5.20.0"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@sveltejs/vite-plugin-svelte": "^7.3.0",
     "vite": "npm:rolldown-vite@^7.2.2"
   }
 }

@@ -36,16 +36,16 @@
   ],
   "devDependencies": {
     "@changesets/changelog-github": "^1.0.1",
-    "@changesets/cli": "^2.29.7",
-    "@types/node": "^24.10.0",
-    "bumpp": "^10.3.1",
-    "happy-dom": "^20.0.10",
-    "prettier": "^3.6.2",
-    "tsdown": "^0.16.1",
-    "turbo": "^2.6.0",
-    "typescript": "^5.9.3",
-    "unplugin-lightningcss": "^0.4.3",
+    "@changesets/cli": "^3.0.2",
+    "@types/node": "^26.5.1",
+    "bumpp": "^12.3.0",
+    "happy-dom": "^20.14.5",
+    "prettier": "^3.9.6",
+    "tsdown": "^0.23.0",
+    "turbo": "^2.10.12",
+    "typescript": "^7.0.2",
+    "unplugin-lightningcss": "^0.5.0",
     "vite": "npm:rolldown-vite@^7.2.2",
-    "vitest": "^4.0.8"
+    "vitest": "^5.0.0"
   }
 }
