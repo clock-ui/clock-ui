@@ -1,6 +1,6 @@
 {
   "name": "@clock-ui/react",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "React components for Clock UI, providing live and static clock widgets built with React and hooks for reactive time updates.",
   "keywords": [
     "clock",
