@@ -108,11 +108,13 @@ This has to be configured once per package on npmjs.com, under
 | --- | --- |
 | Organization or user | `clock-ui` |
 | Repository | `clock-ui` |
-| Workflow filename | `release.yml` |
+| Workflow filename | `publish.yml` |
 | Environment | leave blank |
 
-Repeat for `@clock-ui/dom`, `@clock-ui/react` and `@clock-ui/vue`. The workflow
-filename must match exactly, extension included.
+Repeat for `@clock-ui/dom`, `@clock-ui/react` and `@clock-ui/vue`. npm matches
+on the **filename**, not the workflow's `name:` field, and it must match
+exactly including the extension — which is why the file is `publish.yml` even
+though the workflow is called Release.
 
 Leave the environment field empty on purpose. Setting it puts GitHub's
 deployment protection in front of *every* run of the workflow, including the
