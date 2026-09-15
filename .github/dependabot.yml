@@ -1,12 +1,20 @@
 version: 2
 updates:
-  - package-ecosystem: npm
+  # This repo installs with Bun and has no npm or yarn lockfile. The npm
+  # ecosystem does not know bun.lock exists, so it bumps package.json and
+  # leaves the lockfile behind — every such pull request then fails CI on
+  # `bun install --frozen-lockfile` and cannot be merged as opened.
+  #
+  # The bun ecosystem regenerates bun.lock alongside package.json. It requires
+  # the text-based lockfile, which this repo uses.
+  - package-ecosystem: bun
     directory: /
     schedule:
       interval: monthly
     groups:
       dev-dependencies:
         dependency-type: development
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
