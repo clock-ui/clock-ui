@@ -95,5 +95,42 @@ Two things are deliberate about this setup:
   `utils` and `styles` packages are unaffected, and the example apps are
   excluded through `ignore` so they do not collect pointless bumps.
 
-The workflow needs one secret: `NPM_TOKEN`, an npm **automation** token.
-A granular token with 2FA enabled will fail in CI.
+### Trusted publishing
+
+There is no npm token. Publishing authenticates through OIDC: the workflow
+mints a short-lived token scoped to that single run, which npm exchanges for
+publish rights. Nothing long-lived is stored in repository secrets.
+
+This has to be configured once per package on npmjs.com, under
+**Settings → Trusted Publisher → GitHub Actions**:
+
+| Field | Value |
+| --- | --- |
+| Organization or user | `clock-ui` |
+| Repository | `clock-ui` |
+| Workflow filename | `release.yml` |
+| Environment | leave blank |
+
+Repeat for `@clock-ui/dom`, `@clock-ui/react` and `@clock-ui/vue`. The workflow
+filename must match exactly, extension included.
+
+Leave the environment field empty on purpose. Setting it puts GitHub's
+deployment protection in front of *every* run of the workflow, including the
+ones that only open the version pull request — so you would be approving
+deployments to get a changelog.
+
+Two details that are easy to get wrong:
+
+- **Node 24 and an explicit npm upgrade.** OIDC needs Node 22.14+ and npm
+  11.5.1+. Installing a recent Node does not give you a recent enough npm, so
+  the workflow upgrades npm before publishing and prints both versions.
+- **No `NODE_AUTH_TOKEN` in the workflow.** npm prefers an explicit token over
+  OIDC, so leaving one in place silently bypasses trusted publishing. For the
+  same reason `NPM_CONFIG_PROVENANCE` is gone — provenance is automatic here.
+
+If publishing fails with a 404 on a scoped package
+(`PUT /@clock-ui%2fdom`), that is
+[npm/cli#8976](https://github.com/npm/cli/issues/8976), which was still open
+when this was set up. The fallback is to restore `NODE_AUTH_TOKEN:
+${{ secrets.NPM_TOKEN }}` to the publish step using an npm **automation**
+token — a granular token with 2FA will fail in CI.
