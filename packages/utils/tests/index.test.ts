@@ -336,15 +336,18 @@ describe("timezone switching", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 0, 1, 10, 30, 20, 0));
 
-    const clock = new ClockWork({});
+    const clock = new ClockWork({ timezone: "UTC" });
     clock.updateTick();
-    const localHours = clock.getState().hours;
+    const utcHours = clock.getState().hours;
 
-    // Tick mode only refreshes hours/minutes at the start of a minute, so
+    // Tick mode only refreshes hours and minutes at the start of a minute, so
     // without an explicit refresh this would lag by up to 60 seconds.
-    clock.setOptions({ timezone: "UTC" });
+    //
+    // Both zones are named rather than relying on the machine's own: CI
+    // runners are UTC, so comparing against local time asserts nothing there.
+    // Tokyo observes no DST, so the offset is always exactly 9 hours.
+    clock.setOptions({ timezone: "Asia/Tokyo" });
 
-    expect(clock.getState().hours).not.toBe(localHours);
-    expect(clock.getState().hours).toBe(new Date().getUTCHours());
+    expect(clock.getState().hours).toBe((utcHours + 9) % 24);
   });
 });

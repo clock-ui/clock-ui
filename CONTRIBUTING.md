@@ -47,6 +47,10 @@ cd packages/react && bun run play
 ## Before you open a PR
 
 1. `bun run test` and `bun run typecheck` both pass.
+   Worth running the suite under a different timezone too, since this library
+   is full of time arithmetic and CI runners are UTC:
+   `TZ=UTC bun run test`. A test that only passes in your own zone will go
+   green locally and red in CI.
 2. `bunx publint --strict` passes in any package whose `package.json` you touched.
 3. Add a changeset: `bun run changeset`. Skip this only for docs-only changes.
 
