@@ -11,6 +11,8 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  # Mints the short-lived OIDC token npm exchanges for publish rights. Without
+  # this, trusted publishing falls back to looking for a token and fails.
   id-token: write
 
 jobs:
@@ -23,11 +25,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Trusted publishing needs Node >= 22.14.0, and npm >= 11.5.1 to
+      # understand the OIDC exchange at all. Node 24 ships npm 11.x, but not
+      # necessarily new enough, so it is upgraded explicitly below.
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
+
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@latest
+
+      # Printed so a version-related publish failure is obvious from the log
+      # rather than surfacing as an opaque auth error.
+      - name: Report toolchain
+        run: |
+          echo "node $(node --version)"
+          echo "npm  $(npm --version)  (trusted publishing needs >= 11.5.1)"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -44,6 +59,11 @@ jobs:
       # Versioning runs here rather than locally because
       # @changesets/changelog-github needs a GITHUB_TOKEN to resolve pull
       # request and author links, and fails outright without one.
+      #
+      # There is deliberately no NODE_AUTH_TOKEN. npm prefers an explicit
+      # token over OIDC, so leaving one here would quietly bypass trusted
+      # publishing. Provenance is generated automatically under OIDC, so
+      # NPM_CONFIG_PROVENANCE is unnecessary too.
       - name: Version or publish
         uses: changesets/action@v1
         with:
@@ -53,5 +73,3 @@ jobs:
           title: "chore(release): version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"
