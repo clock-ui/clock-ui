@@ -28,6 +28,26 @@ updates:
       - dependency-name: typescript
         update-types: ["version-update:semver-major"]
 
+      # tsdown 0.23 replaces unplugin-lightningcss with @tsdown/css. Attempted
+      # and reverted — it breaks four things at once:
+      #
+      #   1. The Vue package stops building. tsdown's dts plugin cannot handle
+      #      SFCs, failing with "this.fileExists is not a function" and
+      #      "'default' is not exported by src/BaseClock.vue.d.ts". Output drops
+      #      to index.cjs and a stylesheet: no ESM, no type declarations.
+      #   2. CSS is no longer minified. That was lightningcss's job, and
+      #      tsdown's own `minify` does not cover it — 5,637 to 6,598 bytes.
+      #   3. The emitted stylesheet is renamed index.css to style.css, which
+      #      breaks exports["./base.css"] in all three packages and every
+      #      published CDN link in the docs.
+      #   4. element.css is no longer emitted, so the custom element's CDN
+      #      example would 404.
+      #
+      # (1) is upstream and blocks the rest. Re-test that first when revisiting;
+      # if the Vue package builds with types, the other three are config work.
+      - dependency-name: tsdown
+        update-types: ["version-update:semver-major"]
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
