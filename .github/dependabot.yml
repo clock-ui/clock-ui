@@ -61,6 +61,25 @@ updates:
           - "version-update:semver-major"
           - "version-update:semver-minor"
 
+      # vue-tsc 3.3 breaks the Vue package's declaration build:
+      #
+      #   [rolldown-plugin-dts:generate]
+      #   TypeError: this.ts.findConfigFile is not a function
+      #
+      # tsdown generates Vue declarations through rolldown-plugin-dts, which
+      # delegates to @vue/language-core — pinned by whichever vue-tsc is
+      # installed. 3.3 changed an internal the plugin relies on.
+      #
+      # Isolated by bumping each separately: tsdown 0.16.8 alone builds fine,
+      # and adding vue-tsc 3.3.11 is what breaks it. So this is vue-tsc, not
+      # tsdown, despite the error surfacing inside a tsdown plugin.
+      #
+      # 3.1.x patches still flow.
+      - dependency-name: vue-tsc
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
