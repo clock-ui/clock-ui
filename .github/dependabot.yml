@@ -45,8 +45,21 @@ updates:
       #
       # (1) is upstream and blocks the rest. Re-test that first when revisiting;
       # if the Vue package builds with types, the other three are config work.
+      #
+      # Note the update-types: tsdown is pre-1.0, so 0.16 to 0.23 is a semver
+      # *minor*. Ignoring majors alone does nothing here — that would only
+      # catch an eventual 1.0.
       - dependency-name: tsdown
-        update-types: ["version-update:semver-major"]
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+
+      # Same pre-1.0 reasoning: this is tsdown's CSS plugin and has to move
+      # with it, and tsdown 0.23 drops it entirely in favour of @tsdown/css.
+      - dependency-name: unplugin-lightningcss
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
 
   - package-ecosystem: github-actions
     directory: /
