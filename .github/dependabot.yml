@@ -84,3 +84,18 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      # changesets/action v2 requires @changesets/cli v3; this repo is on
+      # 2.29.7. Nothing in CI exercises the release workflow, so this bump
+      # passes its checks and would only fail during an actual release —
+      # after the version pull request has already been merged.
+      #
+      # Taking it means upgrading @changesets/cli to v3 in the same change and
+      # re-verifying the version step end to end: lockstep versions across the
+      # three published packages, changelog generation, and the private and
+      # example packages staying untouched.
+      #
+      # v1 patches still flow.
+      - dependency-name: changesets/action
+        update-types:
+          - "version-update:semver-major"
